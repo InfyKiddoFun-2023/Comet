@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using InfyKiddoFun.Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace InfyKiddoFun.Infrastructure
 {
@@ -8,5 +9,8 @@ namespace InfyKiddoFun.Infrastructure
         {
            
         }
+        public DbSet<Course> Courses { get; set; }
+
+
     }
 }
