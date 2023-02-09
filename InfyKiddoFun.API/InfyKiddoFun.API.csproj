@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InfyKiddoFun.Application\InfyKiddoFun.Application.csproj" />
     <ProjectReference Include="..\InfyKiddoFun.Infrastructure\InfyKiddoFun.Infrastructure.csproj" />
   </ItemGroup>
 
