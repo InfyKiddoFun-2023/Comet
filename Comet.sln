@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfyKiddoFun.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfyKiddoFun.Domain", "InfyKiddoFun.Domain\InfyKiddoFun.Domain.csproj", "{F127D88F-0CA8-4680-A905-933D5423D2D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfyKiddoFun.Application", "InfyKiddoFun.Application\InfyKiddoFun.Application.csproj", "{75DDA8D8-9B89-4E58-AB04-2CB8ED6D7410}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{F127D88F-0CA8-4680-A905-933D5423D2D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F127D88F-0CA8-4680-A905-933D5423D2D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F127D88F-0CA8-4680-A905-933D5423D2D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75DDA8D8-9B89-4E58-AB04-2CB8ED6D7410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75DDA8D8-9B89-4E58-AB04-2CB8ED6D7410}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75DDA8D8-9B89-4E58-AB04-2CB8ED6D7410}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75DDA8D8-9B89-4E58-AB04-2CB8ED6D7410}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
