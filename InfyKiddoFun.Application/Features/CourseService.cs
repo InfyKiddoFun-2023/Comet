@@ -1,7 +1,6 @@
 ﻿using InfyKiddoFun.Application.Interfaces;
 using InfyKiddoFun.Application.Models;
 using InfyKiddoFun.Domain.Entities;
-using InfyKiddoFun.Domain.Enums;
 using InfyKiddoFun.Infrastructure;
 
 namespace InfyKiddoFun.Application.Features;

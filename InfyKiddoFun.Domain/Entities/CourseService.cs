@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace InfyKiddoFun.Domain.Entities;
 
-namespace InfyKiddoFun.Domain.Entities
+internal class CourseService
 {
-    internal class CourseService
-    {
-    }
 }
