@@ -15,6 +15,13 @@ public class CourseController : ControllerBase
         _courseService = courseService;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetAllCourses(int pageNumber, int pageSize, string searchString)
+    {
+        var courses = await _courseService.GetAllCourse(pageNumber, pageSize, searchString);
+        return Ok(courses);
+    }
+
     [HttpGet("{id}")]
     public IActionResult GetCourseById(string id)
     {

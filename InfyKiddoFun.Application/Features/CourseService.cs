@@ -2,6 +2,7 @@
 using InfyKiddoFun.Application.Models;
 using InfyKiddoFun.Domain.Entities;
 using InfyKiddoFun.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace InfyKiddoFun.Application.Features;
 
@@ -12,6 +13,26 @@ public class CourseService : ICourseService
     public CourseService(AppDbContext appDbContext)
     {
         _appDbContext = appDbContext;
+    }
+
+    public async Task<List<CourseResponseModel>> GetAllCourse(int pageNumber, int pageSize, string searchString)
+    {
+        var courses = await _appDbContext.Courses
+            .Select(x => new CourseResponseModel()
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Description = x.Description,
+                Duration = x.Duration,
+                AgeGroup = x.AgeGroup,
+                DifficultyLevel = x.DifficultyLevel,
+                SpecificStream = x.SpecificStream
+            })
+            .OrderBy(x => x.Name)
+            .Skip(pageNumber - 1)
+            .Take(pageSize)
+            .ToListAsync();
+        return courses;
     }
 
     public CourseResponseModel GetById(string id)
