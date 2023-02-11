@@ -34,8 +34,5 @@ namespace InfyKiddoFun.Infrastructure.Migrations
             migrationBuilder.DropTable(
                 name: "Courses");
         }
-
-        
-        }
     }
 }
