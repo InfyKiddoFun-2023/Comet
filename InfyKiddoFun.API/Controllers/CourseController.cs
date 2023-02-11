@@ -21,5 +21,11 @@ public class CourseController : ControllerBase
         _courseService.AddCourse(model);
         return Ok();
     }
-    
+
+    [HttpPut("update")]
+    public IActionResult UpdateCourse(AddEditCourseModel model)
+    {
+        _courseService.UpdateCourse(model);
+        return Ok();
+    }
 }
