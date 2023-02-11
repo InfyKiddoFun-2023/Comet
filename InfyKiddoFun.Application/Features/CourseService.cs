@@ -1,6 +1,7 @@
 ﻿using InfyKiddoFun.Application.Interfaces;
 using InfyKiddoFun.Application.Models;
 using InfyKiddoFun.Domain.Entities;
+using InfyKiddoFun.Domain.Enums;
 using InfyKiddoFun.Infrastructure;
 
 namespace InfyKiddoFun.Application.Features;
@@ -13,7 +14,24 @@ public class CourseService : ICourseService
     {
         _appDbContext = appDbContext;
     }
-    
+
+    public CourseResponseModel GetById(string id)
+    {
+        var course = _appDbContext.Courses.Find(id);
+        if (course == null) return null;
+        var model = new CourseResponseModel
+        {
+            Id = course.Id,
+            Name = course.Name,
+            Description = course.Description,
+            Duration = course.Duration,
+            AgeGroup = course.AgeGroup,
+            DifficultyLevel = course.DifficultyLevel,
+            SpecificStream = course.SpecificStream
+        };
+        return model;
+    }
+
     public void AddCourse(AddEditCourseModel model)
     {
         var course = new Course()

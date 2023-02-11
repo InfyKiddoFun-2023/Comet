@@ -15,6 +15,13 @@ public class CourseController : ControllerBase
         _courseService = courseService;
     }
 
+    [HttpGet("{id}")]
+    public IActionResult GetCourseById(string id)
+    {
+        var course = _courseService.GetById(id);
+        return Ok(course);
+    }
+
     [HttpPost("add")]
     public IActionResult AddCourse(AddEditCourseModel model)
     {
