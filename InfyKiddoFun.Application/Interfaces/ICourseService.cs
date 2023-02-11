@@ -6,4 +6,5 @@ public interface ICourseService
 {
     void AddCourse(AddEditCourseModel model);
     void UpdateCourse(AddEditCourseModel model);
+    void DeleteCourse(string id);
 }

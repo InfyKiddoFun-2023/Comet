@@ -28,4 +28,11 @@ public class CourseController : ControllerBase
         _courseService.UpdateCourse(model);
         return Ok();
     }
+
+    [HttpDelete("{id}")]
+    public IActionResult DeleteCourse(string id)
+    {
+        _courseService.DeleteCourse(id);
+        return Ok();
+    }
 }
