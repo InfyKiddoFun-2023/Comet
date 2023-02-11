@@ -18,6 +18,15 @@ namespace InfyKiddoFun.Infrastructure
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Course>().Property(x => x.Id).ValueGeneratedOnAdd();
-        }
+
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<StudentUser>().Property(x => x.Id).ValueGeneratedOnAdd();
+
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ParentUser>().Property(x => x.Id).ValueGeneratedOnAdd();
+
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<MentorUser>().Property(x => x.Id).ValueGeneratedOnAdd();
+        } 
     }
 }
