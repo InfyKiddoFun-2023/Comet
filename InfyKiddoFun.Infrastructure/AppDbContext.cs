@@ -14,6 +14,8 @@ public class AppDbContext:DbContext
     public DbSet<MentorUser> MentorUsers { get; set; }
     public DbSet<ParentUser> ParentUsers { get; set; }
 
+    public DbSet<Enrollment> Enrollments { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

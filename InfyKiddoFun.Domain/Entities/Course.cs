@@ -14,4 +14,6 @@ public class Course
     public DifficultyLevel DifficultyLevel { get; set; }
 
     public SpecificStream SpecificStream { get; set; }
+
+    public ICollection<Enrollment> Enrollments { get; set; }
 }
