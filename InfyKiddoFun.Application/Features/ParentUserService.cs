@@ -1,26 +1,41 @@
 ﻿using InfyKiddoFun.Application.Interfaces;
 using InfyKiddoFun.Application.Models.Identity;
+using InfyKiddoFun.Domain.Entities;
 using InfyKiddoFun.Domain.Wrapper;
-using InfyKiddoFun.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 
 namespace InfyKiddoFun.Application.Features;
 
 public class ParentUserService : IParentUserService
 {
-    private readonly AppDbContext _appDbContext;
+    private readonly UserManager<ParentUser> _userManager;
 
-    public ParentUserService(AppDbContext appDbContext)
+    public ParentUserService(UserManager<ParentUser> userManager)
     {
-        _appDbContext = appDbContext;
+        _userManager = userManager;
     }
 
     public async Task<IResult<LoginResponse>> LoginAsync(LoginRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            throw new Exception("Not implemented");
+        }
+        catch (Exception e)
+        {
+            return await Result<LoginResponse>.FailAsync(e.Message);
+        }
     }
 
     public async Task<IResult<LoginResponse>> RefreshTokenAsync(RefreshTokenRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            throw new Exception("Not implemented");
+        }
+        catch (Exception e)
+        {
+            return await Result<LoginResponse>.FailAsync(e.Message);
+        }
     }
 }
