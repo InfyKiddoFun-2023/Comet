@@ -23,30 +23,28 @@ public class CourseController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public IActionResult GetCourseById(string id)
+    public async Task<IActionResult> GetCourseById(string id)
     {
-        var course = _courseService.GetById(id);
+        var course = await _courseService.GetById(id);
         return Ok(course);
     }
 
     [HttpPost("add")]
-    public IActionResult AddCourse(AddEditCourseModel model)
+    public async Task<IActionResult> AddCourse(AddEditCourseModel model)
     {
-        _courseService.AddCourse(model);
-        return Ok();
+        return Ok(await _courseService.AddCourse(model));
     }
 
     [HttpPut("update")]
-    public IActionResult UpdateCourse(AddEditCourseModel model)
+    public async Task<IActionResult> UpdateCourse(AddEditCourseModel model)
     {
-        _courseService.UpdateCourse(model);
-        return Ok();
+        
+        return Ok(await _courseService.UpdateCourse(model));
     }
 
     [HttpDelete("{id}")]
-    public IActionResult DeleteCourse(string id)
+    public async Task<IActionResult> DeleteCourse(string id)
     {
-        _courseService.DeleteCourse(id);
-        return Ok();
+        return Ok(await _courseService.DeleteCourse(id));
     }
 }
