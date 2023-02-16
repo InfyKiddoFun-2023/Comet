@@ -1,5 +1,6 @@
 ﻿using InfyKiddoFun.Application.Interfaces;
 using InfyKiddoFun.Application.Models;
+using InfyKiddoFun.Application.Models.Courses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InfyKiddoFun.API.Controllers;

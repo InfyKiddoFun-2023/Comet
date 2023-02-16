@@ -1,8 +1,8 @@
 ﻿using InfyKiddoFun.Domain.Enums;
 
-namespace InfyKiddoFun.Application.Models;
+namespace InfyKiddoFun.Application.Models.Courses;
 
-public class CourseResponseModel
+public class AddEditCourseModel
 {
     public string Id { get; set; }
     public string Name { get; set; }

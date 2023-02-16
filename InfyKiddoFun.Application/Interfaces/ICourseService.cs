@@ -1,4 +1,5 @@
 ﻿using InfyKiddoFun.Application.Models;
+using InfyKiddoFun.Application.Models.Courses;
 using InfyKiddoFun.Domain.Wrapper;
 
 namespace InfyKiddoFun.Application.Interfaces;
