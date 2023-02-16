@@ -23,5 +23,6 @@ public class AppDbContext:DbContext
         modelBuilder.Entity<StudentUser>().Property(x => x.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<ParentUser>().Property(x => x.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<MentorUser>().Property(x => x.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<Enrollment>().Property(x => x.Id).ValueGeneratedOnAdd();
     } 
 }
