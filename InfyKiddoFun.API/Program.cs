@@ -11,6 +11,7 @@ var connectionString = builder.Configuration.GetConnectionString("Connection1");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddControllers();
 builder.Services.AddTransient<ICourseService, CourseService>();
+builder.Services.AddTransient<IParentUserService, ParentUserService>();
 builder.Services.AddSwaggerGen();
 
 // Build WebApplication object
