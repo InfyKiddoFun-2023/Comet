@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfyKiddoFun.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230216152228_InitialMigration")]
+    [Migration("20230218124552_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -36,10 +36,6 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -88,6 +84,10 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("UserType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -98,9 +98,9 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("AppUsers", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AppUser");
+                    b.HasDiscriminator<string>("UserType").HasValue("AppUser");
 
                     b.UseTphMappingStrategy();
                 });
@@ -154,6 +154,30 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.ToTable("Enrollments");
                 });
 
+            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.MentorUser", b =>
+                {
+                    b.HasBaseType("InfyKiddoFun.Domain.Entities.AppUser");
+
+                    b.Property<int>("SpecificStream")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("int")
+                        .HasColumnName("SpecificStream");
+
+                    b.HasDiscriminator().HasValue("Mentor");
+                });
+
+            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.ParentUser", b =>
+                {
+                    b.HasBaseType("InfyKiddoFun.Domain.Entities.AppUser");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasDiscriminator().HasValue("Parent");
+                });
+
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.StudentUser", b =>
                 {
                     b.HasBaseType("InfyKiddoFun.Domain.Entities.AppUser");
@@ -162,9 +186,11 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                         .HasColumnType("tinyint");
 
                     b.Property<int>("SpecificStream")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("int")
+                        .HasColumnName("SpecificStream");
 
-                    b.HasDiscriminator().HasValue("StudentUser");
+                    b.HasDiscriminator().HasValue("Student");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.Enrollment", b =>
@@ -178,6 +204,15 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                         .HasForeignKey("StudentId");
 
                     b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.ParentUser", b =>
+                {
+                    b.HasOne("InfyKiddoFun.Domain.Entities.StudentUser", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId");
 
                     b.Navigation("Student");
                 });
