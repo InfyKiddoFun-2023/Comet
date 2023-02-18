@@ -11,15 +11,34 @@ public class AppDbContext : IdentityDbContext<AppUser>
     {
            
     }
+    
+    public DbSet<StudentUser> StudentUsers { get; set; }
+    public DbSet<ParentUser> ParentUsers { get; set; }
+    public DbSet<MentorUser> MentorUsers { get; set; }
     public DbSet<Course> Courses { get; set; }
-
     public DbSet<Enrollment> Enrollments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        //modelBuilder.Entity<AppUser>().ToTable("AppUsers");
+        modelBuilder.Entity<StudentUser>()
+            .Property(x => x.SpecificStream)
+            .HasColumnName("SpecificStream");
+        
+        modelBuilder.Entity<MentorUser>()
+            .Property(x => x.SpecificStream)
+            .HasColumnName("SpecificStream");
+
+        modelBuilder.Entity<AppUser>(entity =>
+        {
+            entity.ToTable("AppUsers").Property(x => x.Id).ValueGeneratedOnAdd();
+            entity.HasDiscriminator<string>("UserType")
+                .HasValue<ParentUser>("Parent")
+                .HasValue<StudentUser>("Student")
+                .HasValue<MentorUser>("Mentor");
+        });
+        
         modelBuilder.Ignore<IdentityRole>();
         modelBuilder.Ignore<IdentityUserClaim<string>>();
         modelBuilder.Ignore<IdentityUserRole<string>>();
@@ -28,6 +47,5 @@ public class AppDbContext : IdentityDbContext<AppUser>
         modelBuilder.Ignore<IdentityUserToken<string>>();
         
         modelBuilder.Entity<Course>().Property(x => x.Id).ValueGeneratedOnAdd();
-        modelBuilder.Entity<AppUser>().Property(x => x.Id).ValueGeneratedOnAdd();
     } 
 }
