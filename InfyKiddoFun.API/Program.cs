@@ -1,5 +1,6 @@
 using InfyKiddoFun.Application.Features;
 using InfyKiddoFun.Application.Interfaces;
+using InfyKiddoFun.Domain.Configurations;
 using InfyKiddoFun.Domain.Entities;
 using InfyKiddoFun.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Register all services to the IoC container
+builder.Services.Configure<TokenConfiguration>(builder.Configuration.GetSection(nameof(TokenConfiguration)));
 var connectionString = builder.Configuration.GetConnectionString("Connection1");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddIdentityCore<ParentUser>().AddEntityFrameworkStores<AppDbContext>();
