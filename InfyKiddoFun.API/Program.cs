@@ -1,3 +1,4 @@
+using InfyKiddoFun.API.Extensions;
 using InfyKiddoFun.Application.Features;
 using InfyKiddoFun.Application.Interfaces;
 using InfyKiddoFun.Domain.Configurations;
@@ -15,6 +16,8 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(conn
 builder.Services.AddIdentityCore<ParentUser>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddIdentityCore<MentorUser>().AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddIdentityCore<StudentUser>().AddEntityFrameworkStores<AppDbContext>();
+builder.Services.AddJwtAuthentication(builder.Configuration.GetSection(nameof(TokenConfiguration))
+    .GetSection(nameof(TokenConfiguration.Secret)).Value);
 builder.Services.AddControllers();
 builder.Services.AddTransient<ICourseService, CourseService>();
 builder.Services.AddTransient<IParentUserService, ParentUserService>();
