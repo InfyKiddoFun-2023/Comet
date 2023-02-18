@@ -1,10 +1,11 @@
 ﻿using InfyKiddoFun.Application.Interfaces;
-using InfyKiddoFun.Application.Models;
 using InfyKiddoFun.Application.Models.Courses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InfyKiddoFun.API.Controllers;
 
+[Authorize]
 [Route("api/courses")]
 [ApiController]
 public class CourseController : ControllerBase
