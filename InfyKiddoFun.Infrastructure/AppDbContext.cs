@@ -16,7 +16,10 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<ParentUser> ParentUsers { get; set; }
     public DbSet<MentorUser> MentorUsers { get; set; }
     public DbSet<Course> Courses { get; set; }
-    public DbSet<Enrollment> Enrollments { get; set; }
+    public DbSet<CourseEnrollment> Enrollments { get; set; }
+    public DbSet<CourseModule> CourseModules { get; set; }
+    public DbSet<CourseProgress> CourseProgresses { get; set; }
+    public DbSet<CourseModuleProgress> CourseModuleProgresses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -47,5 +50,8 @@ public class AppDbContext : IdentityDbContext<AppUser>
         modelBuilder.Ignore<IdentityUserToken<string>>();
         
         modelBuilder.Entity<Course>().Property(x => x.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<CourseModule>().Property(x => x.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<CourseProgress>().Property(x => x.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<CourseModuleProgress>().Property(x => x.Id).ValueGeneratedOnAdd();
     } 
 }

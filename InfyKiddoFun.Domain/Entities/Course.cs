@@ -4,10 +4,15 @@ namespace InfyKiddoFun.Domain.Entities;
 
 public class Course
 {
+    public Course()
+    {
+        Enrollments = new List<CourseEnrollment>();
+    }
+    
     public string Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public int Duration { get; set; }
+    public int DurationInWeeks { get; set; }
 
     public AgeGroup AgeGroup { get; set; }
 
@@ -15,5 +20,5 @@ public class Course
 
     public SpecificStream SpecificStream { get; set; }
 
-    public ICollection<Enrollment> Enrollments { get; set; }
+    public ICollection<CourseEnrollment> Enrollments { get; set; }
 }

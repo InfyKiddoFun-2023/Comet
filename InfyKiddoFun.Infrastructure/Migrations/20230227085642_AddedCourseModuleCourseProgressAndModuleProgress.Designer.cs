@@ -4,6 +4,7 @@ using InfyKiddoFun.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfyKiddoFun.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230227085642_AddedCourseModuleCourseProgressAndModuleProgress")]
+    partial class AddedCourseModuleCourseProgressAndModuleProgress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,9 +30,6 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AboutMe")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -126,11 +126,8 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<int>("DifficultyLevel")
                         .HasColumnType("int");
 
-                    b.Property<int>("DurationInWeeks")
+                    b.Property<int>("Duration")
                         .HasColumnType("int");
-
-                    b.Property<string>("MentorUserId")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -140,32 +137,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MentorUserId");
-
                     b.ToTable("Courses");
-                });
-
-            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseEnrollment", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CourseId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("EnrollDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("StudentId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModule", b =>
@@ -250,6 +222,29 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.ToTable("CourseProgresses");
                 });
 
+            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.Enrollment", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CourseId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("EnrollDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("StudentId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Enrollments");
+                });
+
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.MentorUser", b =>
                 {
                     b.HasBaseType("InfyKiddoFun.Domain.Entities.AppUser");
@@ -287,28 +282,6 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                         .HasColumnName("SpecificStream");
 
                     b.HasDiscriminator().HasValue("Student");
-                });
-
-            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.Course", b =>
-                {
-                    b.HasOne("InfyKiddoFun.Domain.Entities.MentorUser", null)
-                        .WithMany("Courses")
-                        .HasForeignKey("MentorUserId");
-                });
-
-            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseEnrollment", b =>
-                {
-                    b.HasOne("InfyKiddoFun.Domain.Entities.Course", "Course")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("CourseId");
-
-                    b.HasOne("InfyKiddoFun.Domain.Entities.StudentUser", "Student")
-                        .WithMany("Enrollments")
-                        .HasForeignKey("StudentId");
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModule", b =>
@@ -350,6 +323,21 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.Enrollment", b =>
+                {
+                    b.HasOne("InfyKiddoFun.Domain.Entities.Course", "Course")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("CourseId");
+
+                    b.HasOne("InfyKiddoFun.Domain.Entities.StudentUser", "Student")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("StudentId");
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Student");
+                });
+
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.ParentUser", b =>
                 {
                     b.HasOne("InfyKiddoFun.Domain.Entities.StudentUser", "Student")
@@ -367,11 +355,6 @@ namespace InfyKiddoFun.Infrastructure.Migrations
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseProgress", b =>
                 {
                     b.Navigation("CourseModules");
-                });
-
-            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.MentorUser", b =>
-                {
-                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.StudentUser", b =>

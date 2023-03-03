@@ -25,7 +25,7 @@ public class CourseService : ICourseService
                 Id = x.Id,
                 Name = x.Name,
                 Description = x.Description,
-                Duration = x.Duration,
+                Duration = x.DurationInWeeks,
                 AgeGroup = x.AgeGroup,
                 DifficultyLevel = x.DifficultyLevel,
                 SpecificStream = x.SpecificStream
@@ -49,7 +49,7 @@ public class CourseService : ICourseService
                 Id = course.Id,
                 Name = course.Name,
                 Description = course.Description,
-                Duration = course.Duration,
+                Duration = course.DurationInWeeks,
                 AgeGroup = course.AgeGroup,
                 DifficultyLevel = course.DifficultyLevel,
                 SpecificStream = course.SpecificStream
@@ -69,7 +69,7 @@ public class CourseService : ICourseService
             var course = new Course()
             {
                 AgeGroup = model.AgeGroup,
-                Duration = model.Duration,
+                DurationInWeeks = model.Duration,
                 Description = model.Description,
                 DifficultyLevel = model.DifficultyLevel,
                 Name = model.Name,
@@ -93,7 +93,7 @@ public class CourseService : ICourseService
             if (existingCourse == null)
                 throw new Exception("Course Not Found!");
             existingCourse.AgeGroup = model.AgeGroup;
-            existingCourse.Duration = model.Duration;
+            existingCourse.DurationInWeeks = model.Duration;
             existingCourse.Description = model.Description;
             existingCourse.DifficultyLevel = model.DifficultyLevel;
             existingCourse.Name = model.Name;
