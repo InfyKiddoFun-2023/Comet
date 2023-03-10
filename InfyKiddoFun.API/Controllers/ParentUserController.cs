@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InfyKiddoFun.API.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 [Route("api/users/parent")]
 [ApiController]
 public class ParentUserController : ControllerBase
@@ -17,13 +17,13 @@ public class ParentUserController : ControllerBase
         _parentUserService = parentUserService;
     }
     
-    [HttpPost("login")]
+    [HttpPost("token/get")]
     public async Task<ActionResult> LoginAsync(LoginRequest model)
     {
         return Ok(await _parentUserService.LoginAsync(model));
     }
     
-    [HttpPost("refresh")]
+    [HttpPost("token/refresh")]
     public async Task<ActionResult> RefreshTokenAsync(RefreshTokenRequest model)
     {
         return Ok(await _parentUserService.RefreshTokenAsync(model));

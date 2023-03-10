@@ -20,15 +20,13 @@ public class CourseController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllCourses(int pageNumber, int pageSize, string searchString)
     {
-        var courses = await _courseService.GetAllCourse(pageNumber, pageSize, searchString);
-        return Ok(courses);
+        return Ok(await _courseService.GetAllCourse(pageNumber, pageSize, searchString));
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCourseById(string id)
     {
-        var course = await _courseService.GetById(id);
-        return Ok(course);
+        return Ok(await _courseService.GetById(id));
     }
 
     [HttpPost("add")]

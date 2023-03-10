@@ -1,27 +1,17 @@
 using InfyKiddoFun.API.Extensions;
-using InfyKiddoFun.Application.Features;
-using InfyKiddoFun.Application.Interfaces;
-using InfyKiddoFun.Domain.Configurations;
-using InfyKiddoFun.Domain.Entities;
-using InfyKiddoFun.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 
 // Create WebApplicationBuilder object
 var builder = WebApplication.CreateBuilder(args);
 
 // Register all services to the IoC container
-builder.Services.Configure<TokenConfiguration>(builder.Configuration.GetSection(nameof(TokenConfiguration)));
-var connectionString = builder.Configuration.GetConnectionString("Connection1");
-builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddIdentityCore<ParentUser>().AddEntityFrameworkStores<AppDbContext>();
-builder.Services.AddIdentityCore<MentorUser>().AddEntityFrameworkStores<AppDbContext>();
-builder.Services.AddIdentityCore<StudentUser>().AddEntityFrameworkStores<AppDbContext>();
-builder.Services.AddJwtAuthentication(builder.Configuration.GetSection(nameof(TokenConfiguration))
-    .GetSection(nameof(TokenConfiguration.Secret)).Value);
-builder.Services.AddControllers();
-builder.Services.AddTransient<ICourseService, CourseService>();
-builder.Services.AddTransient<IParentUserService, ParentUserService>();
-builder.Services.AddSwaggerGen();
+builder.Services
+    .AddConfigurations(builder.Configuration)
+    .AddDatabaseWithIdentity(builder.Configuration.GetConnectionString("DefaultConnection"))
+    .AddJwtAuthentication(builder.Configuration.GetTokenConfiguration())
+    .AddPolicyAuthorization()
+    .AddApplicationFeatures()
+    .AddSwagger()
+    .AddControllers();
 
 // Build WebApplication object
 var app = builder.Build();
@@ -31,16 +21,20 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+app.UseStaticFiles();
 app.UseHttpsRedirection();
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "InfyKiddoFun");
-    options.DisplayRequestDuration();
+    options.SwaggerEndpoint($"/swagger/v1/swagger.json", "Comet V1");
     options.RoutePrefix = "swagger";
 });
 
