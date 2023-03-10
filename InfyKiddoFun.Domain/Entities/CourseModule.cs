@@ -9,4 +9,8 @@ public class CourseModule
     public string CourseId { get; set; }
     
     public string Description { get; set; }
+    
+    public DateTime SessionDate { get; set; }
+    
+    public string ClassLink { get; set; }
 }

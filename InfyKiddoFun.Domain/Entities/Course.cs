@@ -7,6 +7,7 @@ public class Course
     public Course()
     {
         Enrollments = new List<CourseEnrollment>();
+        Modules = new List<CourseModule>();
     }
     
     public string Id { get; set; }
@@ -21,4 +22,6 @@ public class Course
     public SpecificStream SpecificStream { get; set; }
 
     public ICollection<CourseEnrollment> Enrollments { get; set; }
+    
+    public ICollection<CourseModule> Modules { get; set; }
 }
