@@ -135,4 +135,116 @@ public class MentorCourseService : IMentorCourseService
             return await Result.FailAsync(e.Message);
         }
     }
+
+    public async Task<IResult> AddCourseModuleAsync(CreateCourseModuleRequest request, string userId)
+    {
+        try
+        {
+            var course = await _appDbContext.Courses.FindAsync(request.CourseId);
+            if (course == null)
+            {
+                throw new Exception("Course Not Found!");
+            }
+            if (course.MentorId != userId)
+            {
+                throw new Exception("Cannot add module to course that you didn't own!");
+            }
+            var existingCourseModuleWithSameTitleAndCourse = await _appDbContext.CourseModules
+                .FirstOrDefaultAsync(x => x.Title == request.Title && x.CourseId == request.CourseId);
+            if(existingCourseModuleWithSameTitleAndCourse != null)
+            {
+                throw new Exception("You already have a module with the same title in this course!");
+            }
+            var module = new CourseModule()
+            {
+                Title = request.Title,
+                Description = request.Description,
+                CourseId = request.CourseId,
+                Order = request.Order,
+                StartDate = request.StartDate
+            };
+            await _appDbContext.CourseModules.AddAsync(module);
+            await _appDbContext.SaveChangesAsync();
+            return await Result.SuccessAsync("Created module successfully!");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<IResult> UpdateCourseModuleAsync(UpdateCourseModuleRequest request, string userId)
+    {
+        try
+        {
+            var module = await _appDbContext.CourseModules.FindAsync(request.Id);
+            if (module == null)
+            {
+                throw new Exception("Module Not Found!");
+            }
+            var course = await _appDbContext.Courses.FindAsync(module.CourseId);
+            if (course == null)
+            {
+                throw new Exception("Course Not Found!");
+            }
+
+            if (course.MentorId != userId)
+            {
+                throw new Exception("Cannot update module of course that you didn't own!");
+            }
+            
+            var existingCourseModuleWithSameTitleAndCourse = await _appDbContext.CourseModules
+                .FirstOrDefaultAsync(x => x.Title == request.Title && x.CourseId == module.CourseId && x.Id != request.Id);
+            if(existingCourseModuleWithSameTitleAndCourse != null)
+            {
+                throw new Exception("You already have a module with the same title in this course!");
+            }
+
+            module.Title = request.Title;
+            module.Description = request.Description;
+            module.Order = request.Order;
+            module.StartDate = request.StartDate;
+            await _appDbContext.SaveChangesAsync();
+            return await Result.SuccessAsync("Updated module successfully!");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<IResult> DeleteCourseModuleAsync(string moduleId, string userId)
+    {
+        try
+        {
+            var module = await _appDbContext.CourseModules.FindAsync(moduleId);
+            if (module == null)
+            {
+                throw new Exception("Module Not Found!");
+            }
+            var course = await _appDbContext.Courses.FindAsync(module.CourseId);
+            if (course == null)
+            {
+                throw new Exception("Course Not Found!");
+            }
+            if (course.MentorId != userId)
+            {
+                throw new Exception("Cannot delete module of course that you didn't own!");
+            }
+            _appDbContext.CourseModules.Remove(module);
+            var nextModules = await _appDbContext.CourseModules
+                .Where(x => x.CourseId == module.CourseId && x.Order > module.Order)
+                .ToListAsync();
+            foreach (var courseModule in nextModules)
+            {
+                courseModule.Order--;
+            }
+            await _appDbContext.SaveChangesAsync();
+            return await Result.SuccessAsync("Deleted module successfully!");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
 }

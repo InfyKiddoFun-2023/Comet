@@ -42,4 +42,22 @@ public class MentorCourseController : ControllerBase
     {
         return Ok(await _mentorCourseService.DeleteCourseAsync(id, User.FindFirstValue(ApplicationClaimTypes.Id)));
     }
+    
+    [HttpPost("module/add")]
+    public async Task<IActionResult> AddCourseModuleAsync(CreateCourseModuleRequest request)
+    {
+        return Ok(await _mentorCourseService.AddCourseModuleAsync(request, User.FindFirstValue(ApplicationClaimTypes.Id)));
+    }
+    
+    [HttpPut("module/update")]
+    public async Task<IActionResult> UpdateCourseModuleAsync(UpdateCourseModuleRequest request)
+    {
+        return Ok(await _mentorCourseService.UpdateCourseModuleAsync(request, User.FindFirstValue(ApplicationClaimTypes.Id)));
+    }
+    
+    [HttpDelete("module/{id}")]
+    public async Task<IActionResult> DeleteCourseModuleAsync(string id)
+    {
+        return Ok(await _mentorCourseService.DeleteCourseModuleAsync(id, User.FindFirstValue(ApplicationClaimTypes.Id)));
+    }
 }
