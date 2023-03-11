@@ -7,4 +7,5 @@ public interface IStudentUserService
 {
     Task<IResult<LoginResponse>> LoginAsync(LoginRequest request);
     Task<IResult<LoginResponse>> RefreshTokenAsync(RefreshTokenRequest request);
+    Task<IResult> RegisterAsync(StudentRegisterRequest request);
 }

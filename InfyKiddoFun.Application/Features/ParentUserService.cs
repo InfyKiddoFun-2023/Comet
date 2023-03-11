@@ -48,7 +48,7 @@ public class ParentUserService : IParentUserService
             await _userManager.UpdateAsync(user);
 
             var token = GenerateJwt(user);
-            var response = new LoginResponse { Token = token, RefreshToken = user.RefreshToken };
+            var response = new LoginResponse { Token = token, RefreshToken = user.RefreshToken, RefreshTokenExpiryTime = user.RefreshTokenExpiryTime  };
             return await Result<LoginResponse>.SuccessAsync(response);
         }
         catch (Exception e)

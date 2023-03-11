@@ -30,4 +30,11 @@ public class StudentUserController : ControllerBase
     {
         return Ok(await _studentUserService.RefreshTokenAsync(request));
     }
+    
+    [AllowAnonymous]
+    [HttpPost("register")]
+    public async Task<IActionResult> RegisterAsync(StudentRegisterRequest request)
+    {
+        return Ok(await _studentUserService.RegisterAsync(request));
+    }
 }
