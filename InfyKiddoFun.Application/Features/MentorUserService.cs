@@ -116,6 +116,32 @@ public class MentorUserService : IMentorUserService
         }
     }
 
+    public async Task<IResult> UpdatePasswordAsync(UpdatePasswordRequest request, string userId)
+    {
+        try
+        {
+            if(string.IsNullOrWhiteSpace(userId))
+                return await Result.FailAsync("User Id is required.");
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return await Result.FailAsync("User Not Found.");
+            if(request.NewPassword != request.ConfirmPassword)
+                return await Result.FailAsync("New Password and Confirm Password do not match.");
+            if (request.OldPassword == request.NewPassword)
+                return await Result.FailAsync("Old Password and New Password cannot be same.");
+            var result = await _userManager.ChangePasswordAsync(user, request.OldPassword, request.NewPassword);
+            if (!result.Succeeded)
+            {
+                return await Result.FailAsync(result.Errors.Select(x => x.Description).ToList());
+            }
+            return await Result.SuccessAsync("Password Updated Successfully.");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
+
     private string GenerateJwt(AppUser user)
     {
         var claims = new List<Claim>
