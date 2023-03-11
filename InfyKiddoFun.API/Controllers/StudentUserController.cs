@@ -18,7 +18,7 @@ public class StudentUserController : ControllerBase
     }
 
     [AllowAnonymous]
-    [HttpPost("token")]
+    [HttpPost("token/get")]
     public async Task<IActionResult> LoginAsync(LoginRequest request)
     {
         return Ok(await _studentUserService.LoginAsync(request));
