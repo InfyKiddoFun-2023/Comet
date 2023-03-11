@@ -24,9 +24,10 @@ public class MentorCourseService : IMentorCourseService
             return await _appDbContext.Courses
                 .Include(x => x.Mentor)
                 .Include(x => x.Enrollments)
+                .Where(x => x.MentorId == userId)
                 .OrderByDescending(x => x.CreatedDate)
                 .ThenBy(x => x.Title)
-                .Select(x => new CourseResponse()
+                .Select(x => new CourseResponse
                 {
                     Id = x.Id,
                     Title = x.Title,

@@ -40,6 +40,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IStudentUserService, StudentUserService>();
         services.AddTransient<IMentorUserService, MentorUserService>();
         services.AddTransient<IMentorCourseService, MentorCourseService>();
+        services.AddTransient<ICourseService, CourseService>();
         return services;
     }
     

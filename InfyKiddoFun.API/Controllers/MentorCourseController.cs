@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InfyKiddoFun.API.Controllers;
 
-[Authorize]
+[Authorize(Roles = Roles.Mentor)]
 [Route("api/mentor/courses")]
 [ApiController]
 public class MentorCourseController : ControllerBase
