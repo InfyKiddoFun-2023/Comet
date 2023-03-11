@@ -10,7 +10,5 @@ public class CourseModule
     
     public string Description { get; set; }
     
-    public DateTime SessionDate { get; set; }
-    
-    public string ClassLink { get; set; }
+    public IList<CourseModuleMaterial> Materials { get; set; }
 }

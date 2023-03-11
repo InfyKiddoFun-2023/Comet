@@ -2,14 +2,14 @@
 
 public enum SpecificStream
 {
-    None,
-    ArchitectureAndPlanning,
-    Design,
-    EngineeringAndTechnology,
-    HealthSciences,
-    HumanitiesAndArts,
-    Law,
-    ManagementAndCommerce,
-    MathsAndSciences,
-    TeacherEducation,
+    Others,
+    Language,
+    Mathematics,
+    Science,
+    SocialScience,
+    EnvironmentalStudies,
+    GeneralKnowledge,
+    ValueEducation,
+    Commerce,
+    Accountancy
 }
