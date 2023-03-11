@@ -2,7 +2,7 @@
 
 namespace InfyKiddoFun.Application.Models.Identity;
 
-public class MentorRegisterRequest
+public class UpdateStudentInfoRequest
 {
     public string UserName { get; set; }
     public string FirstName { get; set; }
@@ -10,7 +10,6 @@ public class MentorRegisterRequest
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public string AboutMe { get; set; }
-    public Subject Subject { get; set; }
-    public string Password { get; set; }
-    public string ConfirmPassword { get; set; }
+    public AgeGroup AgeGroup { get; set; }
+    public List<Subject> Subjects { get; set; }
 }

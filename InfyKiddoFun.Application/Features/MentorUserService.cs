@@ -100,7 +100,7 @@ public class MentorUserService : IMentorUserService
                 PhoneNumber = request.PhoneNumber,
                 EmailConfirmed = true,
                 PhoneNumberConfirmed = true,
-                SpecificStream = request.SpecificStream,
+                Subject = request.Subject,
                 AboutMe = request.AboutMe,
             };
             var result = await _userManager.CreateAsync(user, request.Password);
@@ -109,6 +109,33 @@ public class MentorUserService : IMentorUserService
                 return await Result.FailAsync(result.Errors.Select(x => x.Description).ToList());
             }
             return await Result.SuccessAsync("Mentor Registered Successfully.");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<IResult> UpdateInfoAsync(UpdateMentorInfoRequest request, string userId)
+    {
+        try
+        {
+            if(string.IsNullOrWhiteSpace(userId))
+                return await Result.FailAsync("User Id is required.");
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return await Result.FailAsync("User Not Found.");
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.PhoneNumber = request.PhoneNumber;
+            user.Subject = request.Subject;
+            user.AboutMe = request.AboutMe;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return await Result.FailAsync(result.Errors.Select(x => x.Description).ToList());
+            }
+            return await Result.SuccessAsync("Mentor Info Updated Successfully.");
         }
         catch (Exception e)
         {

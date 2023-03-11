@@ -11,7 +11,7 @@ public class StudentRegisterRequest
     public string PhoneNumber { get; set; }
     public string AboutMe { get; set; }
     public AgeGroup AgeGroup { get; set; }
-    public SpecificStream SpecificStream { get; set; }
+    public List<Subject> Subjects { get; set; }
     public string Password { get; set; }
     public string ConfirmPassword { get; set; }
 }

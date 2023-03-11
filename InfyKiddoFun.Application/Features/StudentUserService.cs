@@ -103,7 +103,7 @@ public class StudentUserService : IStudentUserService
                 PhoneNumberConfirmed = true,
                 AboutMe = request.AboutMe,
                 AgeGroup = request.AgeGroup,
-                SpecificStream = request.SpecificStream,
+                PreferredSubjects = request.Subjects,
             };
             var result = await _userManager.CreateAsync(user, request.Password);
             if (!result.Succeeded)
@@ -111,6 +111,34 @@ public class StudentUserService : IStudentUserService
                 return await Result.FailAsync(result.Errors.Select(x => x.Description).ToList());
             }
             return await Result.SuccessAsync("Student Registered Successfully!");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<IResult> UpdateInfoAsync(UpdateStudentInfoRequest request, string userId)
+    {
+        try
+        {
+            if(string.IsNullOrWhiteSpace(userId))
+                return await Result.FailAsync("User Id is required.");
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return await Result.FailAsync("User Not Found.");
+            user.FirstName = request.FirstName;
+            user.LastName = request.LastName;
+            user.PhoneNumber = request.PhoneNumber;
+            user.AboutMe = request.AboutMe;
+            user.AgeGroup = request.AgeGroup;
+            user.PreferredSubjects = request.Subjects;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                return await Result.FailAsync(result.Errors.Select(x => x.Description).ToList());
+            }
+            return await Result.SuccessAsync("Student Info Updated Successfully!");
         }
         catch (Exception e)
         {

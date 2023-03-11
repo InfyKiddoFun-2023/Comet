@@ -40,6 +40,12 @@ public class StudentUserController : ControllerBase
         return Ok(await _studentUserService.RegisterAsync(request));
     }
     
+    [HttpPost("info/update")]
+    public async Task<IActionResult> UpdateInfoAsync(UpdateStudentInfoRequest request)
+    {
+        return Ok(await _studentUserService.UpdateInfoAsync(request, User.FindFirstValue(ApplicationClaimTypes.Id)));
+    }
+    
     [HttpPost("password/update")]
     public async Task<IActionResult> UpdatePasswordAsync(UpdatePasswordRequest request)
     {

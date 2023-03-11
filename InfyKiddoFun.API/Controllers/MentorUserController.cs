@@ -40,6 +40,12 @@ public class MentorUserController : ControllerBase
         return Ok(await _mentorUserService.RegisterAsync(model));
     }
     
+    [HttpPost("info/update")]
+    public async Task<ActionResult> UpdateInfoAsync(UpdateMentorInfoRequest model)
+    {
+        return Ok(await _mentorUserService.UpdateInfoAsync(model, User.FindFirstValue(ApplicationClaimTypes.Id)));
+    }
+    
     [HttpPost("password/update")]
     public async Task<ActionResult> UpdatePasswordAsync(UpdatePasswordRequest model)
     {

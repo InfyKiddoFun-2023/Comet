@@ -8,5 +8,6 @@ public interface IMentorUserService
     Task<IResult<LoginResponse>> LoginAsync(LoginRequest request);
     Task<IResult<LoginResponse>> RefreshTokenAsync(RefreshTokenRequest request);
     Task<IResult> RegisterAsync(MentorRegisterRequest request);
+    Task<IResult> UpdateInfoAsync(UpdateMentorInfoRequest request, string userId);
     Task<IResult> UpdatePasswordAsync(UpdatePasswordRequest request, string userId);
 }
