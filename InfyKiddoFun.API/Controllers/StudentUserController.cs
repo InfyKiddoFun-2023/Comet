@@ -1,11 +1,12 @@
 ﻿using InfyKiddoFun.Application.Interfaces;
 using InfyKiddoFun.Application.Models.Identity;
+using InfyKiddoFun.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InfyKiddoFun.API.Controllers;
 
-[Authorize]
+[Authorize(Roles = Roles.Student)]
 [Route("api/users/student")]
 [ApiController]
 public class StudentUserController : ControllerBase

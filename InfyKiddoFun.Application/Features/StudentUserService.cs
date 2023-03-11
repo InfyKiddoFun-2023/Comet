@@ -90,6 +90,8 @@ public class StudentUserService : IStudentUserService
     {
         try
         {
+            if(request.Password != request.ConfirmPassword)
+                return await Result.FailAsync("Password and Confirm Password do not match.");
             var user = new StudentUser
             {
                 UserName = request.UserName,
@@ -98,6 +100,7 @@ public class StudentUserService : IStudentUserService
                 LastName = request.LastName,
                 PhoneNumber = request.PhoneNumber,
                 EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
                 AboutMe = request.AboutMe,
                 AgeGroup = request.AgeGroup,
                 SpecificStream = request.SpecificStream,

@@ -1,11 +1,12 @@
 ﻿using InfyKiddoFun.Application.Interfaces;
 using InfyKiddoFun.Application.Models.Identity;
+using InfyKiddoFun.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InfyKiddoFun.API.Controllers;
 
-[Authorize]
+[Authorize(Roles = Roles.Mentor)]
 [Route("api/users/mentor")]
 [ApiController]
 public class MentorUserController : ControllerBase
@@ -29,5 +30,12 @@ public class MentorUserController : ControllerBase
     public async Task<ActionResult> RefreshTokenAsync(RefreshTokenRequest model)
     {
         return Ok(await _mentorUserService.RefreshTokenAsync(model));
+    }
+    
+    [AllowAnonymous]
+    [HttpPost("register")]
+    public async Task<ActionResult> RegisterAsync(MentorRegisterRequest model)
+    {
+        return Ok(await _mentorUserService.RegisterAsync(model));
     }
 }

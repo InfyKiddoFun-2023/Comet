@@ -84,7 +84,38 @@ public class MentorUserService : IMentorUserService
             return await Result<LoginResponse>.FailAsync(e.Message);
         }
     }
-    
+
+    public async Task<IResult> RegisterAsync(MentorRegisterRequest request)
+    {
+        try
+        {
+            if(request.Password != request.ConfirmPassword)
+                return await Result.FailAsync("Password and Confirm Password do not match.");
+            var user = new MentorUser
+            {
+                UserName = request.UserName,
+                Email = request.Email,
+                FirstName = request.FirstName,
+                LastName = request.LastName,
+                PhoneNumber = request.PhoneNumber,
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+                SpecificStream = request.SpecificStream,
+                AboutMe = request.AboutMe,
+            };
+            var result = await _userManager.CreateAsync(user, request.Password);
+            if (!result.Succeeded)
+            {
+                return await Result.FailAsync(result.Errors.Select(x => x.Description).ToList());
+            }
+            return await Result.SuccessAsync("Mentor Registered Successfully.");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
+
     private string GenerateJwt(AppUser user)
     {
         var claims = new List<Claim>
