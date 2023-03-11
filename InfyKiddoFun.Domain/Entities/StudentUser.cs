@@ -11,7 +11,7 @@ public class StudentUser : AppUser
 
     public AgeGroup AgeGroup { get; set; }
     
-    public SpecificStream SpecificStream { get; set; }
+    public IList<Subject> PreferredSubjects { get; set; }
 
     public ICollection<CourseEnrollment> Enrollments { get; set; }
 }

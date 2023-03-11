@@ -18,7 +18,7 @@ public class Course
     
     public DifficultyLevel DifficultyLevel { get; set; }
     
-    public SpecificStream Stream { get; set; }
+    public Subject Subject { get; set; }
     
     public DateTime CreatedDate { get; set; }
     

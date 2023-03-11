@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfyKiddoFun.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230228074911_UpdateCourseEnrollmentAndMinorEdits")]
-    partial class UpdateCourseEnrollmentAndMinorEdits
+    [Migration("20230311081008_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -83,6 +83,10 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<DateTime>("RefreshTokenExpiryTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -92,10 +96,6 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("UserType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -109,7 +109,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.ToTable("AppUsers", (string)null);
 
-                    b.HasDiscriminator<string>("UserType").HasValue("AppUser");
+                    b.HasDiscriminator<string>("Role").HasValue("AppUser");
 
                     b.UseTphMappingStrategy();
                 });
@@ -123,27 +123,30 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<byte>("AgeGroup")
                         .HasColumnType("tinyint");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DifficultyLevel")
                         .HasColumnType("int");
 
-                    b.Property<int>("DurationInWeeks")
-                        .HasColumnType("int");
-
-                    b.Property<string>("MentorUserId")
+                    b.Property<string>("MentorId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("SpecificStream")
+                    b.Property<int>("Subject")
                         .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MentorUserId");
+                    b.HasIndex("MentorId");
 
                     b.ToTable("Courses");
                 });
@@ -151,6 +154,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseEnrollment", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CourseId")
@@ -171,6 +175,28 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.ToTable("Enrollments");
                 });
 
+            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseMaterial", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CourseId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("MaterialType")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("CourseMaterial");
+                });
+
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModule", b =>
                 {
                     b.Property<string>("Id")
@@ -183,6 +209,12 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -191,6 +223,28 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("CourseModules");
+                });
+
+            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleMaterial", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("MaterialType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("ModuleId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ModuleId");
+
+                    b.ToTable("CourseModuleMaterial");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleProgress", b =>
@@ -257,10 +311,8 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                 {
                     b.HasBaseType("InfyKiddoFun.Domain.Entities.AppUser");
 
-                    b.Property<int>("SpecificStream")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("int")
-                        .HasColumnName("SpecificStream");
+                    b.Property<int>("Subject")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Mentor");
                 });
@@ -284,19 +336,19 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<byte>("AgeGroup")
                         .HasColumnType("tinyint");
 
-                    b.Property<int>("SpecificStream")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("int")
-                        .HasColumnName("SpecificStream");
+                    b.Property<string>("PreferredSubjects")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Student");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.Course", b =>
                 {
-                    b.HasOne("InfyKiddoFun.Domain.Entities.MentorUser", null)
+                    b.HasOne("InfyKiddoFun.Domain.Entities.MentorUser", "Mentor")
                         .WithMany("Courses")
-                        .HasForeignKey("MentorUserId");
+                        .HasForeignKey("MentorId");
+
+                    b.Navigation("Mentor");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseEnrollment", b =>
@@ -314,6 +366,15 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseMaterial", b =>
+                {
+                    b.HasOne("InfyKiddoFun.Domain.Entities.Course", "Course")
+                        .WithMany("Materials")
+                        .HasForeignKey("CourseId");
+
+                    b.Navigation("Course");
+                });
+
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModule", b =>
                 {
                     b.HasOne("InfyKiddoFun.Domain.Entities.Course", "Course")
@@ -321,6 +382,15 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                         .HasForeignKey("CourseId");
 
                     b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleMaterial", b =>
+                {
+                    b.HasOne("InfyKiddoFun.Domain.Entities.CourseModule", "Module")
+                        .WithMany("Materials")
+                        .HasForeignKey("ModuleId");
+
+                    b.Navigation("Module");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleProgress", b =>
@@ -365,6 +435,13 @@ namespace InfyKiddoFun.Infrastructure.Migrations
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.Course", b =>
                 {
                     b.Navigation("Enrollments");
+
+                    b.Navigation("Materials");
+                });
+
+            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModule", b =>
+                {
+                    b.Navigation("Materials");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseProgress", b =>

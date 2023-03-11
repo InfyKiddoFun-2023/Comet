@@ -9,7 +9,7 @@ public class MentorUser : AppUser
         Courses = new List<Course>();
     }
     
-    public SpecificStream SpecificStream { get; set; }
+    public Subject Subject { get; set; }
     
     public ICollection<Course> Courses { get; set; }
 }

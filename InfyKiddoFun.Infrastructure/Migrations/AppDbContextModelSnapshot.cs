@@ -80,6 +80,10 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<DateTime>("RefreshTokenExpiryTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -89,10 +93,6 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("UserType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -106,7 +106,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.ToTable("AppUsers", (string)null);
 
-                    b.HasDiscriminator<string>("UserType").HasValue("AppUser");
+                    b.HasDiscriminator<string>("Role").HasValue("AppUser");
 
                     b.UseTphMappingStrategy();
                 });
@@ -135,7 +135,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Stream")
+                    b.Property<int>("Subject")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -151,6 +151,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseEnrollment", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CourseId")
@@ -174,6 +175,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseMaterial", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CourseId")
@@ -204,6 +206,12 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
 
@@ -217,6 +225,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleMaterial", b =>
                 {
                     b.Property<string>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Link")
@@ -299,10 +308,8 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                 {
                     b.HasBaseType("InfyKiddoFun.Domain.Entities.AppUser");
 
-                    b.Property<int>("SpecificStream")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("int")
-                        .HasColumnName("SpecificStream");
+                    b.Property<int>("Subject")
+                        .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("Mentor");
                 });
@@ -326,10 +333,8 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<byte>("AgeGroup")
                         .HasColumnType("tinyint");
 
-                    b.Property<int>("SpecificStream")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("int")
-                        .HasColumnName("SpecificStream");
+                    b.Property<string>("PreferredSubjects")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Student");
                 });

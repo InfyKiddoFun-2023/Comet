@@ -1,6 +1,6 @@
 ﻿namespace InfyKiddoFun.Domain.Enums;
 
-public enum SpecificStream
+public enum Subject
 {
     Others,
     Language,
