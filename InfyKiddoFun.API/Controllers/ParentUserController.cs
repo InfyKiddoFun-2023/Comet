@@ -17,12 +17,14 @@ public class ParentUserController : ControllerBase
         _parentUserService = parentUserService;
     }
     
+    [AllowAnonymous]
     [HttpPost("token/get")]
     public async Task<ActionResult> LoginAsync(LoginRequest model)
     {
         return Ok(await _parentUserService.LoginAsync(model));
     }
     
+    [AllowAnonymous]
     [HttpPost("token/refresh")]
     public async Task<ActionResult> RefreshTokenAsync(RefreshTokenRequest model)
     {

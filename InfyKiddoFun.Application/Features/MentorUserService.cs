@@ -14,15 +14,15 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace InfyKiddoFun.Application.Features;
 
-public class ParentUserService : IParentUserService
+public class MentorUserService : IMentorUserService
 {
-    private readonly UserManager<ParentUser> _userManager;
+    private readonly UserManager<MentorUser> _userManager;
     private readonly TokenConfiguration _tokenConfiguration;
 
-    public ParentUserService(UserManager<ParentUser> userManager, IOptions<TokenConfiguration> options)
+    public MentorUserService(UserManager<MentorUser> userManager, IOptions<TokenConfiguration> tokenConfiguration)
     {
         _userManager = userManager;
-        _tokenConfiguration = options.Value;
+        _tokenConfiguration = tokenConfiguration.Value;
     }
 
     public async Task<IResult<LoginResponse>> LoginAsync(LoginRequest request)
@@ -84,7 +84,8 @@ public class ParentUserService : IParentUserService
             return await Result<LoginResponse>.FailAsync(e.Message);
         }
     }
-    private string GenerateJwt(ParentUser user)
+    
+    private string GenerateJwt(AppUser user)
     {
         var claims = new List<Claim>
         {
@@ -94,11 +95,11 @@ public class ParentUserService : IParentUserService
             new(ApplicationClaimTypes.FirstName, user.FirstName),
             new(ApplicationClaimTypes.LastName, user.LastName),
             new(ApplicationClaimTypes.PhoneNumber, user.PhoneNumber!),
-            new(ApplicationClaimTypes.Role, Roles.Parent),
+            new(ApplicationClaimTypes.Role, Roles.Mentor),
         };
         return GenerateEncryptedToken(GetSigningCredentials(), claims);
     }
-    
+
     private static string GenerateRefreshToken()
     {
         var randomNumber = new byte[32];
@@ -129,7 +130,7 @@ public class ParentUserService : IParentUserService
         var tokenHandler = new JwtSecurityTokenHandler();
         var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out var securityToken);
         if (securityToken is not JwtSecurityToken jwtSecurityToken || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,
-            StringComparison.InvariantCultureIgnoreCase))
+                StringComparison.InvariantCultureIgnoreCase))
         {
             throw new SecurityTokenException("Invalid token");
         }

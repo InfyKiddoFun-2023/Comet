@@ -38,6 +38,8 @@ public static class ServiceCollectionExtensions
     {
         services.AddTransient<ICourseService, CourseService>();
         services.AddTransient<IParentUserService, ParentUserService>();
+        services.AddTransient<IStudentUserService, StudentUserService>();
+        services.AddTransient<IMentorUserService, MentorUserService>();
         return services;
     }
     

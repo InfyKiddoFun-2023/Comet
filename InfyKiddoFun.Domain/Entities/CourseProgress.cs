@@ -2,11 +2,6 @@
 
 public class CourseProgress
 {
-    public CourseProgress()
-    {
-        CourseModules = new List<CourseModuleProgress>();
-    }
-    
     public string Id { get; set; }
     
     public Course Course { get; set; }
@@ -18,7 +13,7 @@ public class CourseProgress
     public bool Completed { get; set; }
     public DateTime? CompletedOn { get; set; }
     
-    public ICollection<CourseModuleProgress> CourseModules { get; set; }
+    public IList<CourseModuleProgress> CourseModules { get; set; }
 
     public DateTime LastUpdated { get; set; }
 }
