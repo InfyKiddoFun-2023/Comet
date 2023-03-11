@@ -4,7 +4,6 @@ namespace InfyKiddoFun.Domain.Entities;
 
 public class Course
 {
-    //course basic info
     public string Id { get; set; }
     
     public string Title { get; set; }
@@ -23,8 +22,10 @@ public class Course
     public DateTime CreatedDate { get; set; }
     
     public DateTime StartDate { get; set; }
-    
-    public IList<CourseEnrollment> Enrollments { get; set; }
-    
-    public IList<CourseMaterial> Materials { get; set; }
+
+    public List<CourseEnrollment> Enrollments { get; set; } = new();
+
+    public List<CourseMaterial> Materials { get; set; } = new();
+
+    public List<CourseModule> Modules { get; set; } = new();
 }

@@ -36,10 +36,10 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddApplicationFeatures(this IServiceCollection services)
     {
-        services.AddTransient<ICourseService, CourseService>();
         services.AddTransient<IParentUserService, ParentUserService>();
         services.AddTransient<IStudentUserService, StudentUserService>();
         services.AddTransient<IMentorUserService, MentorUserService>();
+        services.AddTransient<IMentorCourseService, MentorCourseService>();
         return services;
     }
     
