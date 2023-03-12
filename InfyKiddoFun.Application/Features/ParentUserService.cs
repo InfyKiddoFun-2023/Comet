@@ -66,7 +66,7 @@ public class ParentUserService : IParentUserService
                 throw new Exception("Invalid Client Token.");
             }
             var userPrincipal = GetPrincipalFromExpiredToken(request.Token);
-            var userName = userPrincipal.FindFirstValue(ClaimTypes.Name)!;
+            var userName = userPrincipal.FindFirstValue(ApplicationClaimTypes.UserName)!;
             var user = await _userManager.FindByNameAsync(userName);
             if (user == null)
                 throw new Exception("User Not Found.");
