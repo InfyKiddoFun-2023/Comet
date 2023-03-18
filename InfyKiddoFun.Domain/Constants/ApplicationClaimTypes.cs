@@ -17,3 +17,10 @@ public static class Roles
     public const string Student = "Student";
     public const string Parent = "Parent";
 }
+
+public static class Policies
+{
+    public const string Mentor = "Mentor";
+    public const string Student = "Student";
+    public const string Parent = "Parent";
+}

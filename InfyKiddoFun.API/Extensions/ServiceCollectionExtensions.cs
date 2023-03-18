@@ -113,9 +113,9 @@ public static class ServiceCollectionExtensions
     {
         services.AddAuthorization(options =>
         {
-            options.AddPolicy(Roles.Mentor, policy => policy.RequireClaim(ApplicationClaimTypes.Role, Roles.Mentor));
-            options.AddPolicy(Roles.Student, policy => policy.RequireClaim(ApplicationClaimTypes.Role, Roles.Student));
-            options.AddPolicy(Roles.Parent, policy => policy.RequireClaim(ApplicationClaimTypes.Role, Roles.Parent));
+            options.AddPolicy(Policies.Mentor, policy => policy.RequireRole(Roles.Mentor));
+            options.AddPolicy(Policies.Student, policy => policy.RequireRole(Roles.Student));
+            options.AddPolicy(Policies.Parent, policy => policy.RequireRole(Roles.Parent));
         });
         return services;
     }
