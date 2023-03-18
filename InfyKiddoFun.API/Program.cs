@@ -1,4 +1,5 @@
 using InfyKiddoFun.API.Extensions;
+using Microsoft.Extensions.FileProviders;
 
 // Create WebApplicationBuilder object
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Files")),
+    RequestPath = new PathString("/Files")
+});
 app.UseHttpsRedirection();
 
 app.UseRouting();
