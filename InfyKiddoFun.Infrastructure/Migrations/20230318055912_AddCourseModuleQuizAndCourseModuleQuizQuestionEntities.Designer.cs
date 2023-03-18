@@ -4,6 +4,7 @@ using InfyKiddoFun.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfyKiddoFun.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230318055912_AddCourseModuleQuizAndCourseModuleQuizQuestionEntities")]
+    partial class AddCourseModuleQuizAndCourseModuleQuizQuestionEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,17 +218,11 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<string>("ModuleId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("CourseModuleMaterials");
+                    b.ToTable("CourseModuleMaterial");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleProgress", b =>
@@ -279,7 +276,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[ModuleId] IS NOT NULL");
 
-                    b.ToTable("CourseModuleQuizzes");
+                    b.ToTable("CourseModuleQuiz");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleQuizQuestion", b =>

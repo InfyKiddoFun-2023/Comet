@@ -8,6 +8,9 @@ public class CourseModuleMaterial
     
     public CourseModule Module { get; set; }
     public string ModuleId { get; set; }
+    public int Order { get; set; }
+    
+    public string Title { get; set; }
     
     public MaterialType MaterialType { get; set; }
     

@@ -19,6 +19,8 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<Course> Courses { get; set; }
     public DbSet<CourseEnrollment> Enrollments { get; set; }
     public DbSet<CourseModule> CourseModules { get; set; }
+    public DbSet<CourseModuleMaterial> CourseModuleMaterials { get; set; }
+    public DbSet<CourseModuleQuiz> CourseModuleQuizzes { get; set; }
     public DbSet<CourseProgress> CourseProgresses { get; set; }
     public DbSet<CourseModuleProgress> CourseModuleProgresses { get; set; }
 
