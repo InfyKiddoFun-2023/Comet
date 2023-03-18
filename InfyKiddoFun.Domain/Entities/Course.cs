@@ -25,7 +25,5 @@ public class Course
 
     public List<CourseEnrollment> Enrollments { get; set; } = new();
 
-    public List<CourseMaterial> Materials { get; set; } = new();
-
     public List<CourseModule> Modules { get; set; } = new();
 }

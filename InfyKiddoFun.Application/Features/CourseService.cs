@@ -70,13 +70,7 @@ public class CourseService : ICourseService
                 DifficultyLevel = course.DifficultyLevel.ToDescriptionString(),
                 Enrollments = course.Enrollments.Count,
                 StartDate = course.StartDate,
-                CreatedDate = course.CreatedDate,
-                Materials = course.Materials.Select(y => new CourseMaterialResponse
-                {
-                    Id = y.Id,
-                    MaterialType = y.MaterialType.ToDescriptionString(),
-                    Link = y.Link,
-                }).ToList()
+                CreatedDate = course.CreatedDate
             };
             var modules = await _appDbContext.CourseModules
                 .Include(x => x.Materials)

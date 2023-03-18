@@ -4,6 +4,7 @@ using InfyKiddoFun.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfyKiddoFun.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230318053159_RemoveCourseMaterialEntity")]
+    partial class RemoveCourseMaterialEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -252,55 +255,6 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.ToTable("CourseModuleProgresses");
                 });
 
-            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleQuiz", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ModuleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("PassPercentage")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ModuleId")
-                        .IsUnique()
-                        .HasFilter("[ModuleId] IS NOT NULL");
-
-                    b.ToTable("CourseModuleQuiz");
-                });
-
-            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleQuizQuestion", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("CorrectOption")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Options")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Question")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("QuizId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("QuizId");
-
-                    b.ToTable("CourseModuleQuizQuestion");
-                });
-
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseProgress", b =>
                 {
                     b.Property<string>("Id")
@@ -423,24 +377,6 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Navigation("CourseProgress");
                 });
 
-            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleQuiz", b =>
-                {
-                    b.HasOne("InfyKiddoFun.Domain.Entities.CourseModule", "Module")
-                        .WithOne("Quiz")
-                        .HasForeignKey("InfyKiddoFun.Domain.Entities.CourseModuleQuiz", "ModuleId");
-
-                    b.Navigation("Module");
-                });
-
-            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleQuizQuestion", b =>
-                {
-                    b.HasOne("InfyKiddoFun.Domain.Entities.CourseModuleQuiz", "Quiz")
-                        .WithMany("Questions")
-                        .HasForeignKey("QuizId");
-
-                    b.Navigation("Quiz");
-                });
-
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseProgress", b =>
                 {
                     b.HasOne("InfyKiddoFun.Domain.Entities.Course", "Course")
@@ -475,13 +411,6 @@ namespace InfyKiddoFun.Infrastructure.Migrations
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModule", b =>
                 {
                     b.Navigation("Materials");
-
-                    b.Navigation("Quiz");
-                });
-
-            modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleQuiz", b =>
-                {
-                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseProgress", b =>

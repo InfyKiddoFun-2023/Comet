@@ -16,4 +16,6 @@ public class CourseModule
     public DateTime StartDate { get; set; }
     
     public IList<CourseModuleMaterial> Materials { get; set; }
+    
+    public CourseModuleQuiz Quiz { get; set; }
 }

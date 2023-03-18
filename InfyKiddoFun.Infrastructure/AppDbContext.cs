@@ -59,10 +59,20 @@ public class AppDbContext : IdentityDbContext<AppUser>
 
         modelBuilder.Entity<Course>().Property(x => x.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<CourseEnrollment>().Property(x => x.Id).ValueGeneratedOnAdd();
-        modelBuilder.Entity<CourseMaterial>().Property(x => x.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<CourseModule>().Property(x => x.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<CourseModuleMaterial>().Property(x => x.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<CourseProgress>().Property(x => x.Id).ValueGeneratedOnAdd();
         modelBuilder.Entity<CourseModuleProgress>().Property(x => x.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<CourseModuleQuiz>().Property(x => x.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<CourseModuleQuizQuestion>(entity =>
+        {
+            entity.Property(x => x.Id).ValueGeneratedOnAdd();
+            entity.Property(x => x.Options).HasConversion(
+                options => string.Join(',', options),
+                options => options
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .ToList()
+            );
+        });
     }
 }

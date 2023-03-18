@@ -15,6 +15,5 @@ public class CourseFullResponse
     public DateTime CreatedDate { get; set; }
     public DateTime StartDate { get; set; }
     public int Enrollments { get; set; }
-    public IList<CourseMaterialResponse> Materials { get; set; }
     public IList<CourseModuleResponse> Modules { get; set; }
 }
