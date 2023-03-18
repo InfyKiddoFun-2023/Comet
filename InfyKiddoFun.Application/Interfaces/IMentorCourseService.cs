@@ -12,4 +12,10 @@ public interface IMentorCourseService
     Task<IResult> AddCourseModuleAsync(CreateCourseModuleRequest request, string userId);
     Task<IResult> UpdateCourseModuleAsync(UpdateCourseModuleRequest request, string userId);
     Task<IResult> DeleteCourseModuleAsync(string moduleId, string userId);
+    Task<IResult> AddCourseModuleMaterialAsync(CreateCourseModuleMaterialRequest request, string userId);
+    Task<IResult> UpdateCourseModuleMaterialAsync(UpdateCourseModuleMaterialRequest request, string userId);
+    Task<IResult> DeleteCourseModuleMaterialAsync(string materialId, string userId);
+    Task<IResult> AddCourseModuleQuizAsync(CreateCourseModuleQuizRequest request, string userId);
+    Task<IResult> UpdateCourseModuleQuizAsync(UpdateCourseModuleQuizRequest request, string userId);
+    Task<IResult> DeleteCourseModuleQuizAsync(string quizId, string userId);
 }

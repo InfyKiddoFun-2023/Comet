@@ -60,4 +60,40 @@ public class MentorCourseController : ControllerBase
     {
         return Ok(await _mentorCourseService.DeleteCourseModuleAsync(id, User.FindFirstValue(ApplicationClaimTypes.Id)));
     }
+    
+    [HttpPost("module/material/add")]
+    public async Task<IActionResult> AddCourseModuleMaterialAsync(CreateCourseModuleMaterialRequest request)
+    {
+        return Ok(await _mentorCourseService.AddCourseModuleMaterialAsync(request, User.FindFirstValue(ApplicationClaimTypes.Id)));
+    }
+    
+    [HttpPut("module/material/update")]
+    public async Task<IActionResult> UpdateCourseModuleMaterialAsync(UpdateCourseModuleMaterialRequest request)
+    {
+        return Ok(await _mentorCourseService.UpdateCourseModuleMaterialAsync(request, User.FindFirstValue(ApplicationClaimTypes.Id)));
+    }
+    
+    [HttpDelete("module/material/{id}")]
+    public async Task<IActionResult> DeleteCourseModuleMaterialAsync(string id)
+    {
+        return Ok(await _mentorCourseService.DeleteCourseModuleMaterialAsync(id, User.FindFirstValue(ApplicationClaimTypes.Id)));
+    }
+    
+    [HttpPost("module/quiz/add")]
+    public async Task<IActionResult> AddCourseModuleQuizAsync(CreateCourseModuleQuizRequest request)
+    {
+        return Ok(await _mentorCourseService.AddCourseModuleQuizAsync(request, User.FindFirstValue(ApplicationClaimTypes.Id)));
+    }
+    
+    [HttpPut("module/quiz/update")]
+    public async Task<IActionResult> UpdateCourseModuleQuizAsync(UpdateCourseModuleQuizRequest request)
+    {
+        return Ok(await _mentorCourseService.UpdateCourseModuleQuizAsync(request, User.FindFirstValue(ApplicationClaimTypes.Id)));
+    }
+    
+    [HttpDelete("module/quiz/{id}")]
+    public async Task<IActionResult> DeleteCourseModuleQuizAsync(string id)
+    {
+        return Ok(await _mentorCourseService.DeleteCourseModuleQuizAsync(id, User.FindFirstValue(ApplicationClaimTypes.Id)));
+    }
 }

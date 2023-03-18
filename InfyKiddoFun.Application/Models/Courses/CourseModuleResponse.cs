@@ -10,4 +10,6 @@ public class CourseModuleResponse
     public DateTime StartDate { get; set; }
     
     public IList<CourseModuleMaterialResponse> Materials { get; set; }
+    public string QuizTitle { get; set; }
+    public int QuizQuestions { get; set; }
 }

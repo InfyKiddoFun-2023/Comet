@@ -70,10 +70,12 @@ public class CourseService : ICourseService
                 DifficultyLevel = course.DifficultyLevel.ToDescriptionString(),
                 Enrollments = course.Enrollments.Count,
                 StartDate = course.StartDate,
-                CreatedDate = course.CreatedDate
+                CreatedDate = course.CreatedDate,
             };
             var modules = await _appDbContext.CourseModules
                 .Include(x => x.Materials)
+                .Include(x => x.Quiz)
+                .ThenInclude(x => x.Questions)
                 .Where(x => x.CourseId == courseId)
                 .OrderBy(x => x.Order)
                 .Select(x => new CourseModuleResponse
@@ -87,7 +89,9 @@ public class CourseService : ICourseService
                         Id = y.Id,
                         MaterialType = y.MaterialType.ToDescriptionString(),
                         Link = y.Link,
-                    }).ToList()
+                    }).ToList(),
+                    QuizTitle = x.Quiz.Title,
+                    QuizQuestions = x.Quiz.Questions.Count,
                 }).ToListAsync();
             courseFullResponse.Modules = modules;
             return await Result<CourseFullResponse>.SuccessAsync(courseFullResponse);

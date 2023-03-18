@@ -247,4 +247,272 @@ public class MentorCourseService : IMentorCourseService
             return await Result.FailAsync(e.Message);
         }
     }
+
+    public async Task<IResult> AddCourseModuleMaterialAsync(CreateCourseModuleMaterialRequest request, string userId)
+    {
+        try
+        {
+            var module = await _appDbContext.CourseModules.FindAsync(request.ModuleId);
+            if (module == null)
+            {
+                throw new Exception("Module Not Found!");
+            }
+            var course = await _appDbContext.Courses.FindAsync(module.CourseId);
+            if (course == null)
+            {
+                throw new Exception("Course Not Found!");
+            }
+            if (course.MentorId != userId)
+            {
+                throw new Exception("Cannot add material to module of course that you didn't own!");
+            }
+            var existingCourseModuleMaterialWithSameTitleAndModule = await _appDbContext.CourseModuleMaterials
+                .FirstOrDefaultAsync(x => x.Title == request.Title && x.ModuleId == request.ModuleId);
+            if(existingCourseModuleMaterialWithSameTitleAndModule != null)
+            {
+                throw new Exception("You already have a material with the same title in this module!");
+            }
+            var existingCourseModuleMaterialWithSameOrderAndModule = await _appDbContext.CourseModuleMaterials
+                .FirstOrDefaultAsync(x => x.Order == request.Order && x.ModuleId == request.ModuleId);
+            if(existingCourseModuleMaterialWithSameOrderAndModule != null)
+            {
+                throw new Exception("You already have a material with the same order number in this module!");
+            }
+            var material = new CourseModuleMaterial()
+            {
+                Title = request.Title,
+                ModuleId = request.ModuleId,
+                Order = request.Order,
+                Link = request.Link,
+                MaterialType = request.MaterialType
+            };
+            module.Materials.Add(material);
+            _appDbContext.CourseModules.Update(module);
+            await _appDbContext.SaveChangesAsync();
+            return await Result.SuccessAsync("Created material successfully!");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<IResult> UpdateCourseModuleMaterialAsync(UpdateCourseModuleMaterialRequest request, string userId)
+    {
+        try
+        {
+            var material = await _appDbContext.CourseModuleMaterials.FindAsync(request.Id);
+            if (material == null)
+            {
+                throw new Exception("Material Not Found!");
+            }
+            var module = await _appDbContext.CourseModules.FindAsync(material.ModuleId);
+            if (module == null)
+            {
+                throw new Exception("Module Not Found!");
+            }
+            var course = await _appDbContext.Courses.FindAsync(module.CourseId);
+            if (course == null)
+            {
+                throw new Exception("Course Not Found!");
+            }
+            if (course.MentorId != userId)
+            {
+                throw new Exception("Cannot update material of module of course that you didn't own!");
+            }
+            var existingCourseModuleMaterialWithSameTitleAndModule = await _appDbContext.CourseModuleMaterials
+                .FirstOrDefaultAsync(x => x.Title == request.Title && x.ModuleId == material.ModuleId && x.Id != request.Id);
+            if(existingCourseModuleMaterialWithSameTitleAndModule != null)
+            {
+                throw new Exception("You already have a material with the same title in this module!");
+            }
+            var existingCourseModuleMaterialWithSameOrderAndModule = await _appDbContext.CourseModuleMaterials
+                .FirstOrDefaultAsync(x => x.Order == request.Order && x.ModuleId == material.ModuleId && x.Id != request.Id);
+            if(existingCourseModuleMaterialWithSameOrderAndModule != null)
+            {
+                throw new Exception("You already have a material with the same order number in this module!");
+            }
+            material.Title = request.Title;
+            material.Order = request.Order;
+            material.Link = request.Link;
+            material.MaterialType = request.MaterialType;
+            _appDbContext.CourseModuleMaterials.Update(material);
+            await _appDbContext.SaveChangesAsync();
+            return await Result.SuccessAsync("Updated material successfully!");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<IResult> DeleteCourseModuleMaterialAsync(string materialId, string userId)
+    {
+        try
+        {
+            var material = await _appDbContext.CourseModuleMaterials.FindAsync(materialId);
+            if (material == null)
+            {
+                throw new Exception("Material Not Found!");
+            }
+            var module = await _appDbContext.CourseModules.FindAsync(material.ModuleId);
+            if (module == null)
+            {
+                throw new Exception("Module Not Found!");
+            }
+            var course = await _appDbContext.Courses.FindAsync(module.CourseId);
+            if (course == null)
+            {
+                throw new Exception("Course Not Found!");
+            }
+            if (course.MentorId != userId)
+            {
+                throw new Exception("Cannot delete material of module of course that you didn't own!");
+            }
+            _appDbContext.CourseModuleMaterials.Remove(material);
+            var nextMaterials = await _appDbContext.CourseModuleMaterials
+                .Where(x => x.ModuleId == material.ModuleId && x.Order > material.Order)
+                .ToListAsync();
+            foreach (var courseModuleMaterial in nextMaterials)
+            {
+                courseModuleMaterial.Order--;
+            }
+            await _appDbContext.SaveChangesAsync();
+            return await Result.SuccessAsync("Deleted material successfully!");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<IResult> AddCourseModuleQuizAsync(CreateCourseModuleQuizRequest request, string userId)
+    {
+        try
+        {
+            var module = await _appDbContext.CourseModules.FindAsync(request.ModuleId);
+            if (module == null)
+            {
+                throw new Exception("Module Not Found!");
+            }
+            var course = await _appDbContext.Courses.FindAsync(module.CourseId);
+            if (course == null)
+            {
+                throw new Exception("Course Not Found!");
+            }
+            if (course.MentorId != userId)
+            {
+                throw new Exception("Cannot add quiz to module of course that you didn't own!");
+            }
+            var existingQuizInSameModule = await _appDbContext.CourseModuleQuizzes
+                .FirstOrDefaultAsync(x => x.ModuleId == request.ModuleId);
+            if(existingQuizInSameModule != null)
+            {
+                throw new Exception("You already have a quiz in this module!");
+            }
+            var quiz = new CourseModuleQuiz()
+            {
+                Title = request.Title,
+                PassPercentage = request.PassPercentage,
+            };
+            foreach (var question in request.Questions)
+            {
+                var quizQuestion = new CourseModuleQuizQuestion()
+                {
+                    Question = question.Question,
+                    Options = question.Options,
+                    CorrectOption = question.CorrectOptions,
+                    QuizId = quiz.Id
+                };
+                quiz.Questions.Add(quizQuestion);
+            }
+            module.Quiz = quiz;
+            _appDbContext.CourseModules.Update(module);
+            await _appDbContext.SaveChangesAsync();
+            return await Result.SuccessAsync("Created quiz successfully!");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<IResult> UpdateCourseModuleQuizAsync(UpdateCourseModuleQuizRequest request, string userId)
+    {
+        try
+        {
+            var quiz = await _appDbContext.CourseModuleQuizzes.FindAsync(request.Id);
+            if (quiz == null)
+            {
+                throw new Exception("Quiz Not Found!");
+            }
+            var module = await _appDbContext.CourseModules.FindAsync(quiz.ModuleId);
+            if (module == null)
+            {
+                throw new Exception("Module Not Found!");
+            }
+            var course = await _appDbContext.Courses.FindAsync(module.CourseId);
+            if (course == null)
+            {
+                throw new Exception("Course Not Found!");
+            }
+            if (course.MentorId != userId)
+            {
+                throw new Exception("Cannot update quiz of module of course that you didn't own!");
+            }
+            quiz.Title = request.Title;
+            quiz.PassPercentage = request.PassPercentage;
+            quiz.Questions.Clear();
+            foreach (var question in request.Questions)
+            {
+                quiz.Questions.Add(new CourseModuleQuizQuestion()
+                {
+                    Question = question.Question,
+                    Options = question.Options,
+                    CorrectOption = question.CorrectOptions,
+                });
+            }
+            _appDbContext.CourseModuleQuizzes.Update(quiz);
+            await _appDbContext.SaveChangesAsync();
+            return await Result.SuccessAsync("Updated quiz successfully!");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<IResult> DeleteCourseModuleQuizAsync(string quizId, string userId)
+    {
+        try
+        {
+            var quiz = await _appDbContext.CourseModuleQuizzes.FindAsync(quizId);
+            if (quiz == null)
+            {
+                throw new Exception("Quiz Not Found!");
+            }
+            var module = await _appDbContext.CourseModules.FindAsync(quiz.ModuleId);
+            if (module == null)
+            {
+                throw new Exception("Module Not Found!");
+            }
+            var course = await _appDbContext.Courses.FindAsync(module.CourseId);
+            if (course == null)
+            {
+                throw new Exception("Course Not Found!");
+            }
+            if (course.MentorId != userId)
+            {
+                throw new Exception("Cannot delete quiz of module of course that you didn't own!");
+            }
+            module.Quiz = null;
+            _appDbContext.CourseModuleQuizzes.Remove(quiz);
+            await _appDbContext.SaveChangesAsync();
+            return await Result.SuccessAsync("Deleted quiz successfully!");
+        }
+        catch (Exception e)
+        {
+            return await Result.FailAsync(e.Message);
+        }
+    }
 }
