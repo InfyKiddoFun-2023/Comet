@@ -123,7 +123,7 @@ public class ParentUserService : IParentUserService
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenConfiguration.Secret)),
             ValidateIssuer = false,
             ValidateAudience = false,
-            RoleClaimType = ClaimTypes.Role,
+            RoleClaimType = ApplicationClaimTypes.Role,
             ClockSkew = TimeSpan.Zero
         };
         var tokenHandler = new JwtSecurityTokenHandler();
