@@ -11,20 +11,22 @@ namespace InfyKiddoFun.Application.Features;
 public class MentorCourseService : IMentorCourseService
 {
     private readonly AppDbContext _appDbContext;
+    private readonly ICurrentUserService _currentUserService;
 
-    public MentorCourseService(AppDbContext appDbContext)
+    public MentorCourseService(AppDbContext appDbContext, ICurrentUserService currentUserService)
     {
         _appDbContext = appDbContext;
+        _currentUserService = currentUserService;
     }
     
-    public async Task<PaginatedResult<CourseResponse>> GetCoursesAsync(int pageNumber, int pageSize, string searchQuery, string userId)
+    public async Task<PaginatedResult<CourseResponse>> GetCoursesAsync(int pageNumber, int pageSize, string searchQuery)
     {
         try
         {
             return await _appDbContext.Courses
                 .Include(x => x.Mentor)
                 .Include(x => x.Enrollments)
-                .Where(x => x.MentorId == userId)
+                .Where(x => x.MentorId == _currentUserService.UserId)
                 .OrderByDescending(x => x.CreatedDate)
                 .ThenBy(x => x.Title)
                 .Select(x => new CourseResponse
@@ -47,12 +49,12 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> AddCourseAsync(CreateCourseRequest request, string userId)
+    public async Task<IResult> AddCourseAsync(CreateCourseRequest request)
     {
         try
         {
             var existingCourseWithSameTitleAndMentor = await _appDbContext.Courses
-                .FirstOrDefaultAsync(x => x.Title == request.Title && x.MentorId == userId);
+                .FirstOrDefaultAsync(x => x.Title == request.Title && x.MentorId == _currentUserService.UserId);
             if(existingCourseWithSameTitleAndMentor != null)
             {
                 throw new Exception("You already have a course with the same title!");
@@ -66,7 +68,7 @@ public class MentorCourseService : IMentorCourseService
                 Subject = request.Subject,
                 CreatedDate = DateTime.Now,
                 StartDate = request.StartDate,
-                MentorId = userId
+                MentorId = _currentUserService.UserId
             };
             await _appDbContext.Courses.AddAsync(course);
             await _appDbContext.SaveChangesAsync();
@@ -78,7 +80,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> UpdateCourseAsync(UpdateCourseRequest request, string userId)
+    public async Task<IResult> UpdateCourseAsync(UpdateCourseRequest request)
     {
         try
         {
@@ -87,13 +89,13 @@ public class MentorCourseService : IMentorCourseService
             {
                 throw new Exception("Course Not Found!");
             }
-            if (course.MentorId != userId)
+            if (course.MentorId != _currentUserService.UserId)
             {
                 throw new Exception("Cannot update course that you didn't own!");
             }
 
             var existingCourseWithSameTitleAndMentor = await _appDbContext.Courses
-                .FirstOrDefaultAsync(x => x.Title == request.Title && x.MentorId == userId && x.Id != request.Id);
+                .FirstOrDefaultAsync(x => x.Title == request.Title && x.MentorId == _currentUserService.UserId && x.Id != request.Id);
             if(existingCourseWithSameTitleAndMentor != null)
             {
                 throw new Exception("You already have a course with the same title!");
@@ -113,7 +115,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> DeleteCourseAsync(string courseId, string userId)
+    public async Task<IResult> DeleteCourseAsync(string courseId)
     {
         try
         {
@@ -122,7 +124,7 @@ public class MentorCourseService : IMentorCourseService
             {
                 throw new Exception("Course Not Found!");
             }
-            if (course.MentorId != userId)
+            if (course.MentorId != _currentUserService.UserId)
             {
                 throw new Exception("Cannot delete course that you didn't own!");
             }
@@ -136,7 +138,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> AddCourseModuleAsync(CreateCourseModuleRequest request, string userId)
+    public async Task<IResult> AddCourseModuleAsync(CreateCourseModuleRequest request)
     {
         try
         {
@@ -145,7 +147,7 @@ public class MentorCourseService : IMentorCourseService
             {
                 throw new Exception("Course Not Found!");
             }
-            if (course.MentorId != userId)
+            if (course.MentorId != _currentUserService.UserId)
             {
                 throw new Exception("Cannot add module to course that you didn't own!");
             }
@@ -173,7 +175,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> UpdateCourseModuleAsync(UpdateCourseModuleRequest request, string userId)
+    public async Task<IResult> UpdateCourseModuleAsync(UpdateCourseModuleRequest request)
     {
         try
         {
@@ -188,7 +190,7 @@ public class MentorCourseService : IMentorCourseService
                 throw new Exception("Course Not Found!");
             }
 
-            if (course.MentorId != userId)
+            if (course.MentorId != _currentUserService.UserId)
             {
                 throw new Exception("Cannot update module of course that you didn't own!");
             }
@@ -213,7 +215,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> DeleteCourseModuleAsync(string moduleId, string userId)
+    public async Task<IResult> DeleteCourseModuleAsync(string moduleId)
     {
         try
         {
@@ -227,7 +229,7 @@ public class MentorCourseService : IMentorCourseService
             {
                 throw new Exception("Course Not Found!");
             }
-            if (course.MentorId != userId)
+            if (course.MentorId != _currentUserService.UserId)
             {
                 throw new Exception("Cannot delete module of course that you didn't own!");
             }
@@ -248,7 +250,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> AddCourseModuleMaterialAsync(CreateCourseModuleMaterialRequest request, string userId)
+    public async Task<IResult> AddCourseModuleMaterialAsync(CreateCourseModuleMaterialRequest request)
     {
         try
         {
@@ -262,7 +264,7 @@ public class MentorCourseService : IMentorCourseService
             {
                 throw new Exception("Course Not Found!");
             }
-            if (course.MentorId != userId)
+            if (course.MentorId != _currentUserService.UserId)
             {
                 throw new Exception("Cannot add material to module of course that you didn't own!");
             }
@@ -297,7 +299,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> UpdateCourseModuleMaterialAsync(UpdateCourseModuleMaterialRequest request, string userId)
+    public async Task<IResult> UpdateCourseModuleMaterialAsync(UpdateCourseModuleMaterialRequest request)
     {
         try
         {
@@ -316,7 +318,7 @@ public class MentorCourseService : IMentorCourseService
             {
                 throw new Exception("Course Not Found!");
             }
-            if (course.MentorId != userId)
+            if (course.MentorId != _currentUserService.UserId)
             {
                 throw new Exception("Cannot update material of module of course that you didn't own!");
             }
@@ -346,7 +348,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> DeleteCourseModuleMaterialAsync(string materialId, string userId)
+    public async Task<IResult> DeleteCourseModuleMaterialAsync(string materialId)
     {
         try
         {
@@ -365,7 +367,7 @@ public class MentorCourseService : IMentorCourseService
             {
                 throw new Exception("Course Not Found!");
             }
-            if (course.MentorId != userId)
+            if (course.MentorId != _currentUserService.UserId)
             {
                 throw new Exception("Cannot delete material of module of course that you didn't own!");
             }
@@ -386,7 +388,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> AddCourseModuleQuizAsync(CreateCourseModuleQuizRequest request, string userId)
+    public async Task<IResult> AddCourseModuleQuizAsync(CreateCourseModuleQuizRequest request)
     {
         try
         {
@@ -400,7 +402,7 @@ public class MentorCourseService : IMentorCourseService
             {
                 throw new Exception("Course Not Found!");
             }
-            if (course.MentorId != userId)
+            if (course.MentorId != _currentUserService.UserId)
             {
                 throw new Exception("Cannot add quiz to module of course that you didn't own!");
             }
@@ -437,7 +439,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> UpdateCourseModuleQuizAsync(UpdateCourseModuleQuizRequest request, string userId)
+    public async Task<IResult> UpdateCourseModuleQuizAsync(UpdateCourseModuleQuizRequest request)
     {
         try
         {
@@ -456,7 +458,7 @@ public class MentorCourseService : IMentorCourseService
             {
                 throw new Exception("Course Not Found!");
             }
-            if (course.MentorId != userId)
+            if (course.MentorId != _currentUserService.UserId)
             {
                 throw new Exception("Cannot update quiz of module of course that you didn't own!");
             }
@@ -482,7 +484,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> DeleteCourseModuleQuizAsync(string quizId, string userId)
+    public async Task<IResult> DeleteCourseModuleQuizAsync(string quizId)
     {
         try
         {
@@ -501,7 +503,7 @@ public class MentorCourseService : IMentorCourseService
             {
                 throw new Exception("Course Not Found!");
             }
-            if (course.MentorId != userId)
+            if (course.MentorId != _currentUserService.UserId)
             {
                 throw new Exception("Cannot delete quiz of module of course that you didn't own!");
             }

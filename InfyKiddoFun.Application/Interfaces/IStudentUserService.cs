@@ -8,6 +8,6 @@ public interface IStudentUserService
     Task<IResult<LoginResponse>> LoginAsync(LoginRequest request);
     Task<IResult<LoginResponse>> RefreshTokenAsync(RefreshTokenRequest request);
     Task<IResult> RegisterAsync(StudentRegisterRequest request);
-    Task<IResult> UpdateInfoAsync(UpdateStudentInfoRequest request, string userId);
-    Task<IResult> UpdatePasswordAsync(UpdatePasswordRequest request, string userId);
+    Task<IResult> UpdateInfoAsync(UpdateStudentInfoRequest request);
+    Task<IResult> UpdatePasswordAsync(UpdatePasswordRequest request);
 }
