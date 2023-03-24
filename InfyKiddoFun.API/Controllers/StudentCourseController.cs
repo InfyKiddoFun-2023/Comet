@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using InfyKiddoFun.Application.Interfaces;
+﻿using InfyKiddoFun.Application.Interfaces;
 using InfyKiddoFun.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,12 +20,18 @@ public class StudentCourseController : ControllerBase
     [HttpGet("enrollment/{courseId}")]
     public async Task<IActionResult> IsEnrolledInCourseAsync(string courseId)
     {
-        return Ok(await _studentCourseService.IsEnrolledInCourseAsync(courseId, User.FindFirstValue(ApplicationClaimTypes.Id)));
+        return Ok(await _studentCourseService.IsEnrolledInCourseAsync(courseId));
     }
     
     [HttpPost("{courseId}/enroll")]
     public async Task<IActionResult> EnrollCourseAsync(string courseId)
     {
-        return Ok(await _studentCourseService.EnrollCourseAsync(courseId, User.FindFirstValue(ApplicationClaimTypes.Id)));
+        return Ok(await _studentCourseService.EnrollCourseAsync(courseId));
+    }
+    
+    [HttpPost("{courseModuleId}/mark-completed")]
+    public async Task<IActionResult> MarkCourseModuleCompletedAsync(string courseModuleId)
+    {
+        return Ok(await _studentCourseService.MarkCourseModuleCompletedAsync(courseModuleId));
     }
 }
