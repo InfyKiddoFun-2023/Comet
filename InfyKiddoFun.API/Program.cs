@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Register all services to the IoC container
 builder.Services
     .AddConfigurations(builder.Configuration)
+    .AddCurrentUserService()
     .AddDatabaseWithIdentity(builder.Configuration.GetConnectionString("DefaultConnection"))
     .AddJwtAuthentication(builder.Configuration.GetTokenConfiguration())
     .AddPolicyAuthorization()
