@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register all services to the IoC container
 builder.Services
+    .AddCors(x => x.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()))
     .AddConfigurations(builder.Configuration)
     .AddDatabaseWithIdentity(builder.Configuration.GetConnectionString("DefaultConnection"))
     .AddJwtAuthentication(builder.Configuration.GetTokenConfiguration())
@@ -18,6 +19,8 @@ builder.Services
 var app = builder.Build();
 
 // Configure middlewares
+app.UseCors("CorsPolicy");
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
