@@ -1,4 +1,6 @@
-﻿using InfyKiddoFun.Application.Interfaces;
+﻿using InfyKiddoFun.Application.Extensions;
+using InfyKiddoFun.Application.Interfaces;
+using InfyKiddoFun.Application.Models.Courses;
 using InfyKiddoFun.Domain.Entities;
 using InfyKiddoFun.Domain.Wrapper;
 using InfyKiddoFun.Infrastructure;
@@ -149,6 +151,36 @@ public class StudentCourseService : IStudentCourseService
         catch (Exception e)
         {
             return await Result.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<PaginatedResult<CourseResponse>> GetEnrolledCoursesAsync(int pageNumber, int pageSize, string searchString)
+    {
+        try
+        {
+            return await _appDbContext.Courses
+                .Include(x => x.Mentor)
+                .Include(x => x.Enrollments)
+                .Where(x => x.Enrollments.Any(y => y.StudentId == _currentUserService.UserId))
+                .OrderByDescending(x => x.CreatedDate)
+                .ThenBy(x => x.Title)
+                .Select(x => new CourseResponse
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Description = x.Description,
+                    MentorName = x.Mentor.FullName,
+                    MentorId = x.MentorId,
+                    AgeGroup = x.AgeGroup.ToDescriptionString(),
+                    Stream = x.Subject.ToDescriptionString(),
+                    DifficultyLevel = x.DifficultyLevel.ToDescriptionString(),
+                    Enrollments = x.Enrollments.Count()
+                })
+                .ToPaginatedListAsync(pageNumber, pageSize);
+        }
+        catch (Exception e)
+        {
+            return PaginatedResult<CourseResponse>.Failure(new List<string> { e.Message });
         }
     }
 }

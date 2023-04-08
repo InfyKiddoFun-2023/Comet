@@ -16,6 +16,12 @@ public class StudentCourseController : ControllerBase
     {
         _studentCourseService = studentCourseService;
     }
+
+    [HttpGet]
+    public async Task<IActionResult> GetEnrolledCoursesAsync(int pageNumber, int pageSize, string searchString)
+    {
+        return Ok(await _studentCourseService.GetEnrolledCoursesAsync(pageNumber, pageSize, searchString));
+    }
     
     [HttpGet("enrollment/{courseId}")]
     public async Task<IActionResult> IsEnrolledInCourseAsync(string courseId)
