@@ -17,11 +17,13 @@ namespace InfyKiddoFun.Application.Features;
 public class StudentUserService : IStudentUserService
 {
     private readonly UserManager<StudentUser> _userManager;
+    private readonly ICurrentUserService _currentUserService;
     private readonly TokenConfiguration _tokenConfiguration;
 
-    public StudentUserService(UserManager<StudentUser> userManager, IOptions<TokenConfiguration> tokenConfiguration)
+    public StudentUserService(UserManager<StudentUser> userManager, ICurrentUserService currentUserService, IOptions<TokenConfiguration> tokenConfiguration)
     {
         _userManager = userManager;
+        _currentUserService = currentUserService;
         _tokenConfiguration = tokenConfiguration.Value;
     }
 
@@ -118,13 +120,13 @@ public class StudentUserService : IStudentUserService
         }
     }
 
-    public async Task<IResult> UpdateInfoAsync(UpdateStudentInfoRequest request, string userId)
+    public async Task<IResult> UpdateInfoAsync(UpdateStudentInfoRequest request)
     {
         try
         {
-            if(string.IsNullOrWhiteSpace(userId))
+            if(string.IsNullOrWhiteSpace(_currentUserService.UserId))
                 return await Result.FailAsync("User Id is required.");
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(_currentUserService.UserId);
             if (user == null)
                 return await Result.FailAsync("User Not Found.");
             user.FirstName = request.FirstName;
@@ -146,13 +148,13 @@ public class StudentUserService : IStudentUserService
         }
     }
 
-    public async Task<IResult> UpdatePasswordAsync(UpdatePasswordRequest request, string userId)
+    public async Task<IResult> UpdatePasswordAsync(UpdatePasswordRequest request)
     {
         try
         {
-            if(string.IsNullOrWhiteSpace(userId))
+            if(string.IsNullOrWhiteSpace(_currentUserService.UserId))
                 return await Result.FailAsync("User Id is required.");
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByIdAsync(_currentUserService.UserId);
             if (user == null)
                 return await Result.FailAsync("User Not Found.");
             if(request.NewPassword != request.ConfirmPassword)

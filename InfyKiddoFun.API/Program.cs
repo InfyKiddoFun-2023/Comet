@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services
     .AddCors(x => x.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()))
     .AddConfigurations(builder.Configuration)
+    .AddCurrentUserService()
     .AddDatabaseWithIdentity(builder.Configuration.GetConnectionString("DefaultConnection"))
     .AddJwtAuthentication(builder.Configuration.GetTokenConfiguration())
     .AddPolicyAuthorization()

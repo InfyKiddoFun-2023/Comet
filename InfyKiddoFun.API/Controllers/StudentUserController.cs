@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using InfyKiddoFun.Application.Interfaces;
+﻿using InfyKiddoFun.Application.Interfaces;
 using InfyKiddoFun.Application.Models.Identity;
 using InfyKiddoFun.Domain.Constants;
 using Microsoft.AspNetCore.Authorization;
@@ -43,12 +42,12 @@ public class StudentUserController : ControllerBase
     [HttpPost("info/update")]
     public async Task<IActionResult> UpdateInfoAsync(UpdateStudentInfoRequest request)
     {
-        return Ok(await _studentUserService.UpdateInfoAsync(request, User.FindFirstValue(ApplicationClaimTypes.Id)));
+        return Ok(await _studentUserService.UpdateInfoAsync(request));
     }
     
     [HttpPost("password/update")]
     public async Task<IActionResult> UpdatePasswordAsync(UpdatePasswordRequest request)
     {
-        return Ok(await _studentUserService.UpdatePasswordAsync(request, User.FindFirstValue(ApplicationClaimTypes.Id)));
+        return Ok(await _studentUserService.UpdatePasswordAsync(request));
     }
 }

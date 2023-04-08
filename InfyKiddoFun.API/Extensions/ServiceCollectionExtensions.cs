@@ -25,6 +25,13 @@ public static class ServiceCollectionExtensions
         return services;
     }
     
+    public static IServiceCollection AddCurrentUserService(this IServiceCollection services)
+    {
+        services.AddHttpContextAccessor();
+        services.AddTransient<ICurrentUserService, CurrentUserService>();
+        return services;
+    }
+    
     public static IServiceCollection AddDatabaseWithIdentity(this IServiceCollection services, string connectionString)
     {
         services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
