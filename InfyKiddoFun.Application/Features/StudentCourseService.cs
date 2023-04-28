@@ -1,4 +1,6 @@
+using InfyKiddoFun.Application.Extensions;
 using InfyKiddoFun.Application.Interfaces;
+using InfyKiddoFun.Application.Models.Courses;
 using InfyKiddoFun.Domain.Entities;
 using InfyKiddoFun.Domain.Wrapper;
 using InfyKiddoFun.Infrastructure;
