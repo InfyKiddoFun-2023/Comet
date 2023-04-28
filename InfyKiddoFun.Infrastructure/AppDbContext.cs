@@ -23,6 +23,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
     public DbSet<CourseModuleQuiz> CourseModuleQuizzes { get; set; }
     public DbSet<CourseProgress> CourseProgresses { get; set; }
     public DbSet<CourseModuleProgress> CourseModuleProgresses { get; set; }
+    public DbSet<CourseModuleQuizAttempt> CourseModuleQuizAttempts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -76,5 +77,7 @@ public class AppDbContext : IdentityDbContext<AppUser>
                     .ToList()
             );
         });
+        modelBuilder.Entity<CourseModuleQuizAttempt>().Property(x => x.Id).ValueGeneratedOnAdd();
+        modelBuilder.Entity<CourseModuleQuizQuestionAttempt>().Property(x => x.Id).ValueGeneratedOnAdd();
     }
 }

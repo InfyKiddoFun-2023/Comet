@@ -4,6 +4,7 @@ using InfyKiddoFun.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfyKiddoFun.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230325113059_AddCourseModuleQuizAttemptAndCourseModuleQuizQuestionAttemptEntities")]
+    partial class AddCourseModuleQuizAttemptAndCourseModuleQuizQuestionAttemptEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,7 +148,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.HasIndex("MentorId");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseEnrollment", b =>
@@ -169,7 +172,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Enrollments", (string)null);
+                    b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModule", b =>
@@ -197,7 +200,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("CourseModules", (string)null);
+                    b.ToTable("CourseModules");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleMaterial", b =>
@@ -225,7 +228,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("CourseModuleMaterials", (string)null);
+                    b.ToTable("CourseModuleMaterials");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleProgress", b =>
@@ -255,7 +258,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.HasIndex("CourseProgressId");
 
-                    b.ToTable("CourseModuleProgresses", (string)null);
+                    b.ToTable("CourseModuleProgresses");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleQuiz", b =>
@@ -279,7 +282,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                         .IsUnique()
                         .HasFilter("[ModuleId] IS NOT NULL");
 
-                    b.ToTable("CourseModuleQuizzes", (string)null);
+                    b.ToTable("CourseModuleQuizzes");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleQuizAttempt", b =>
@@ -324,18 +327,13 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                     b.Property<int>("TotalWrongAnswers")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CourseModuleId");
 
                     b.HasIndex("QuizId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("CourseModuleQuizAttempts", (string)null);
+                    b.ToTable("CourseModuleQuizAttempts");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleQuizQuestion", b =>
@@ -360,7 +358,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.HasIndex("QuizId");
 
-                    b.ToTable("CourseModuleQuizQuestion", (string)null);
+                    b.ToTable("CourseModuleQuizQuestion");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleQuizQuestionAttempt", b =>
@@ -390,7 +388,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("CourseModuleQuizQuestionAttempt", (string)null);
+                    b.ToTable("CourseModuleQuizQuestionAttempt");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseProgress", b =>
@@ -420,7 +418,7 @@ namespace InfyKiddoFun.Infrastructure.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("CourseProgresses", (string)null);
+                    b.ToTable("CourseProgresses");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.MentorUser", b =>
@@ -534,15 +532,9 @@ namespace InfyKiddoFun.Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("QuizId");
 
-                    b.HasOne("InfyKiddoFun.Domain.Entities.StudentUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("CourseModule");
 
                     b.Navigation("Quiz");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("InfyKiddoFun.Domain.Entities.CourseModuleQuizQuestion", b =>
