@@ -1,6 +1,4 @@
-﻿using InfyKiddoFun.Application.Extensions;
 using InfyKiddoFun.Application.Interfaces;
-using InfyKiddoFun.Application.Models.Courses;
 using InfyKiddoFun.Domain.Entities;
 using InfyKiddoFun.Domain.Wrapper;
 using InfyKiddoFun.Infrastructure;
@@ -152,6 +150,76 @@ public class StudentCourseService : IStudentCourseService
         {
             return await Result.FailAsync(e.Message);
         }
+    }
+
+    public async Task<IResult<QuizAttemptResponse>> AttemptQuizAsync(QuizAttemptRequest request)
+    {
+        try
+        {
+            var courseModule = await _appDbContext.CourseModules.FindAsync(request.CourseModuleId);
+            if (courseModule == null)
+            {
+                throw new Exception("Course Module Not Found!");
+            }
+
+            var enrollment = await _appDbContext.Enrollments
+                .FirstOrDefaultAsync(x => x.CourseId == courseModule.CourseId && x.StudentId == _currentUserService.UserId);
+            if (enrollment == null)
+            {
+                throw new Exception("Not Enrolled!");
+            }
+
+            var courseProgress = await _appDbContext.CourseProgresses
+                .Include(x => x.CourseModules)
+                .FirstOrDefaultAsync(x => x.CourseId == courseModule.CourseId && x.StudentId == _currentUserService.UserId);
+            if (courseProgress == null)
+            {
+                throw new Exception("Course Progress Not Found!");
+            }
+
+            var courseModuleProgress = await _appDbContext.CourseModuleProgresses
+                .FirstOrDefaultAsync(x => x.CourseModuleId == request.CourseModuleId && x.CourseProgressId == courseProgress.Id);
+            if (courseModuleProgress == null)
+            {
+                throw new Exception("Course Module Progress Not Found!");
+            }
+
+            var quiz = await _appDbContext.CourseModuleQuizzes.FindAsync(request.QuizId);
+            if (quiz == null)
+            {
+                throw new Exception("Quiz Not Found!");
+            }
+            
+            var quizAttempt = await _appDbContext.CourseModuleQuizAttempts
+                .Include(x => x.Quiz)
+                .FirstOrDefaultAsync(x => x.QuizId == request.QuizId && x.UserId == _currentUserService.UserId);
+            quizAttempt = quizAttempt ?? new CourseModuleQuizAttempt
+            {
+                QuizId = request.QuizId,
+                UserId = _currentUserService.UserId,
+                //AttemptedOn = DateTime.Now,
+            };
+            await _appDbContext.CourseModuleQuizAttempts.AddAsync(quizAttempt);
+            await _appDbContext.SaveChangesAsync();
+            return await Result<QuizAttemptResponse>.SuccessAsync(new QuizAttemptResponse
+            {
+                QuizId = quiz.Id,
+                QuizTitle = quiz.Title,
+                Questions = quiz.Questions.Select(x => new QuizQuestionAttemptResponse
+                {
+                    Question = x.Question,
+                }).ToList()
+            });
+        }
+        catch (Exception e)
+        {
+            return await Result<QuizAttemptResponse>.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<IResult<QuizAttemptResponse>> GetQuizAttemptResultAsync(string quizId)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<PaginatedResult<CourseResponse>> GetEnrolledCoursesAsync(int pageNumber, int pageSize, string searchString)
