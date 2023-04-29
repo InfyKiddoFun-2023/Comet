@@ -1,6 +1,7 @@
 ﻿using InfyKiddoFun.Application.Extensions;
 using InfyKiddoFun.Application.Interfaces;
 using InfyKiddoFun.Application.Models.Courses;
+using InfyKiddoFun.Application.Specifications;
 using InfyKiddoFun.Domain.Entities;
 using InfyKiddoFun.Domain.Wrapper;
 using InfyKiddoFun.Infrastructure;
@@ -27,6 +28,7 @@ public class MentorCourseService : IMentorCourseService
                 .Include(x => x.Mentor)
                 .Include(x => x.Enrollments)
                 .Where(x => x.MentorId == _currentUserService.UserId)
+                .Specify(new CourseSearchFilterSpecification(searchQuery))
                 .OrderByDescending(x => x.CreatedDate)
                 .ThenBy(x => x.Title)
                 .Select(x => new CourseResponse
