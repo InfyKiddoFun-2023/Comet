@@ -50,4 +50,10 @@ public class StudentUserController : ControllerBase
     {
         return Ok(await _studentUserService.UpdatePasswordAsync(request));
     }
+    
+    [HttpGet("subjects")]
+    public async Task<IActionResult> GetStudentSubjectsAsync()
+    {
+        return Ok(await _studentUserService.GetStudentSubjectsAsync());
+    }
 }

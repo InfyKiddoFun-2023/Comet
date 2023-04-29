@@ -1,4 +1,5 @@
 ﻿using InfyKiddoFun.Application.Models.Identity;
+using InfyKiddoFun.Domain.Enums;
 using InfyKiddoFun.Domain.Wrapper;
 
 namespace InfyKiddoFun.Application.Interfaces;
@@ -10,4 +11,5 @@ public interface IStudentUserService
     Task<IResult> RegisterAsync(StudentRegisterRequest request);
     Task<IResult> UpdateInfoAsync(UpdateStudentInfoRequest request);
     Task<IResult> UpdatePasswordAsync(UpdatePasswordRequest request);
+    Task<IResult<List<Subject>>> GetStudentSubjectsAsync();
 }

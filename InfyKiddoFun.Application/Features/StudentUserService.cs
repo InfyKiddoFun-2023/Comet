@@ -7,6 +7,7 @@ using InfyKiddoFun.Application.Models.Identity;
 using InfyKiddoFun.Domain.Configurations;
 using InfyKiddoFun.Domain.Constants;
 using InfyKiddoFun.Domain.Entities;
+using InfyKiddoFun.Domain.Enums;
 using InfyKiddoFun.Domain.Wrapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -171,6 +172,24 @@ public class StudentUserService : IStudentUserService
         catch (Exception e)
         {
             return await Result.FailAsync(e.Message);
+        }
+    }
+
+    public async Task<IResult<List<Subject>>> GetStudentSubjectsAsync()
+    {
+        try
+        {
+            if(string.IsNullOrWhiteSpace(_currentUserService.UserId))
+                return await Result<List<Subject>>.FailAsync("User Id is required.");
+            var user = await _userManager.FindByIdAsync(_currentUserService.UserId);
+            if (user == null)
+                return await Result<List<Subject>>.FailAsync("User Not Found.");
+            var subjects = user.PreferredSubjects.ToList();
+            return await Result<List<Subject>>.SuccessAsync(subjects);
+        }
+        catch (Exception e)
+        {
+            return await Result<List<Subject>>.FailAsync(e.Message);
         }
     }
 
