@@ -16,6 +16,18 @@ public class CourseController : ControllerBase
         _courseService = courseService;
     }
     
+    [HttpGet("subject/{subject:int}")]
+    public async Task<IActionResult> GetCoursesBySubjectAsync(int pageNumber, int pageSize, int subject, string searchQuery)
+    {
+        return Ok(await _courseService.GetCoursesBySubjectAsync(pageNumber, pageSize, subject, searchQuery));
+    }
+    
+    [HttpGet("age-group/{ageGroup:int}")]
+    public async Task<IActionResult> GetCoursesByAgeGroupAsync(int pageNumber, int pageSize, int ageGroup, string searchQuery)
+    {
+        return Ok(await _courseService.GetCoursesByAgeGroupAsync(pageNumber, pageSize, ageGroup, searchQuery));
+    }
+    
     [HttpGet]
     public async Task<IActionResult> GetCoursesAsync(int pageNumber, int pageSize, string searchQuery)
     {
