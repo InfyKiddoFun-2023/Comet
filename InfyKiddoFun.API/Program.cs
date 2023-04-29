@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Register all services to the IoC container
 builder.Services
-    .AddCors(x => x.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()))
+    .AddCors(x => x.AddPolicy("CorsPolicy", action => action.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()))
     .AddConfigurations(builder.Configuration)
     .AddCurrentUserService()
     .AddDatabaseWithIdentity(builder.Configuration.GetConnectionString("DefaultConnection"))
