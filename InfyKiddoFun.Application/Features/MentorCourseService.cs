@@ -75,7 +75,7 @@ public class MentorCourseService : IMentorCourseService
             await _appDbContext.Courses.AddAsync(course);
             await _appDbContext.SaveChangesAsync();
             course = await _appDbContext.Courses.FirstOrDefaultAsync(x => x.Title == request.Title && x.MentorId == _currentUserService.UserId);
-            return await Result<string>.SuccessAsync("Created course successfully!", course.Id);
+            return await Result<string>.SuccessAsync(message: "Created course successfully!", data: course.Id);
         }
         catch (Exception e)
         {
