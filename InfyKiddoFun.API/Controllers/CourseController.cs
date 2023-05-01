@@ -1,4 +1,5 @@
 ﻿using InfyKiddoFun.Application.Interfaces;
+using InfyKiddoFun.Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,9 +30,9 @@ public class CourseController : ControllerBase
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetCoursesAsync(int pageNumber, int pageSize, string searchQuery)
+    public async Task<IActionResult> GetCoursesAsync(int pageNumber, int pageSize, string searchQuery, Subject? subject, AgeGroup? ageGroup)
     {
-        return Ok(await _courseService.GetCoursesAsync(pageNumber, pageSize, searchQuery));
+        return Ok(await _courseService.GetCoursesAsync(pageNumber, pageSize, searchQuery, subject, ageGroup));
     }
     
     [HttpGet("{id}")]

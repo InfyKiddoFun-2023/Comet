@@ -88,7 +88,7 @@ public class CourseService : ICourseService
         }
     }
 
-    public async Task<PaginatedResult<CourseResponse>> GetCoursesAsync(int pageNumber, int pageSize, string searchQuery)
+    public async Task<PaginatedResult<CourseResponse>> GetCoursesAsync(int pageNumber, int pageSize, string searchQuery, Subject? subject, AgeGroup? ageGroup)
     {
         try
         {
@@ -96,6 +96,8 @@ public class CourseService : ICourseService
                 .Include(x => x.Mentor)
                 .Include(x => x.Enrollments)
                 .Specify(new CourseSearchFilterSpecification(searchQuery))
+                .Specify(new CourseSubjectFilterSpecification(subject))
+                .Specify(new CourseAgeGroupFilterSpecification(ageGroup))
                 .OrderByDescending(x => x.CreatedDate)
                 .ThenBy(x => x.Title)
                 .Select(x => new CourseResponse
