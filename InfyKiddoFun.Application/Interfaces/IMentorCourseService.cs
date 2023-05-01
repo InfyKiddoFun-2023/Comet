@@ -6,7 +6,7 @@ namespace InfyKiddoFun.Application.Interfaces;
 public interface IMentorCourseService
 {
     Task<PaginatedResult<CourseResponse>> GetCoursesAsync(int pageNumber, int pageSize, string searchQuery);
-    Task<IResult> AddCourseAsync(CreateCourseRequest request);
+    Task<IResult<string>> AddCourseAsync(CreateCourseRequest request);
     Task<IResult> UpdateCourseAsync(UpdateCourseRequest request);
     Task<IResult> DeleteCourseAsync(string courseId);
     Task<IResult> AddCourseModuleAsync(CreateCourseModuleRequest request);

@@ -51,7 +51,7 @@ public class MentorCourseService : IMentorCourseService
         }
     }
 
-    public async Task<IResult> AddCourseAsync(CreateCourseRequest request)
+    public async Task<IResult<string>> AddCourseAsync(CreateCourseRequest request)
     {
         try
         {
@@ -74,11 +74,12 @@ public class MentorCourseService : IMentorCourseService
             };
             await _appDbContext.Courses.AddAsync(course);
             await _appDbContext.SaveChangesAsync();
-            return await Result.SuccessAsync("Created course successfully!");
+            course = await _appDbContext.Courses.FirstOrDefaultAsync(x => x.Title == request.Title && x.MentorId == _currentUserService.UserId);
+            return await Result<string>.SuccessAsync("Created course successfully!", course.Id);
         }
         catch (Exception e)
         {
-            return await Result.FailAsync(e.Message);
+            return await Result<string>.FailAsync(e.Message);
         }
     }
 
