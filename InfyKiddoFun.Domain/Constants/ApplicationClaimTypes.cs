@@ -9,6 +9,7 @@ public static class ApplicationClaimTypes
     public const string Email = "Email";
     public const string PhoneNumber = "PhoneNumber";
     public const string Role = "Role";
+    public const string Subject = "Subject";
 }
 
 public static class Roles

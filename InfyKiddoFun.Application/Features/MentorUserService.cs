@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using InfyKiddoFun.Application.Extensions;
 using InfyKiddoFun.Application.Interfaces;
 using InfyKiddoFun.Application.Models.Identity;
 using InfyKiddoFun.Domain.Configurations;
@@ -182,6 +183,7 @@ public class MentorUserService : IMentorUserService
             new(ApplicationClaimTypes.LastName, user.LastName),
             new(ApplicationClaimTypes.PhoneNumber, user.PhoneNumber!),
             new(ApplicationClaimTypes.Role, Roles.Mentor),
+            new(ApplicationClaimTypes.Subject, ((MentorUser)user).Subject.ToString()),
         };
         return GenerateEncryptedToken(GetSigningCredentials(), claims);
     }
